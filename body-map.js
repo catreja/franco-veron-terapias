@@ -217,7 +217,10 @@ function loadModel(urls, onLoad, onProgress, onError) {
 }
 
 loadModel(
-  ['models/body.glb', 'https://threejs.org/examples/models/gltf/Soldier.glb'],
+  [
+    'models/body.glb',
+    'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r160/examples/models/gltf/Soldier.glb',
+  ],
   (gltf) => {
     const model = gltf.scene;
 
