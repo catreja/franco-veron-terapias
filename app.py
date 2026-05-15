@@ -9,6 +9,7 @@ app = Flask(__name__, static_folder='.', static_url_path='')
 # =====================================================================
 #  CONFIGURAÇÕES — lidas de variáveis de ambiente (Railway)
 # =====================================================================
+CALENDLY_TOKEN   = os.environ.get("CALENDLY_TOKEN", "")
 MP_ACCESS_TOKEN  = os.environ.get("MP_ACCESS_TOKEN",  "APP_USR-541007577080389-040515-d0596c847609f2584efc414854df5622-3313855818")
 MP_PUBLIC_KEY    = os.environ.get("MP_PUBLIC_KEY",    "APP_USR-d004f765-abfc-465f-a641-55336eb87947")
 CALLMEBOT_PHONE  = os.environ.get("CALLMEBOT_PHONE",  "558387846147")
@@ -82,6 +83,7 @@ def processar_pagamento():
     data       = request.json or {}
     nome       = data.get('nome', 'Cliente')
     email      = data.get('email', 'cliente@email.com')
+    telefone   = data.get('telefone', '—')
     pid        = data.get('produto_id', 'curso')
     produto    = PRODUTOS.get(pid, PRODUTOS['curso'])
     preco      = produto['preco']
@@ -118,7 +120,7 @@ def processar_pagamento():
 
     # Pagamento aprovado (cartão)
     if status == "approved":
-        _notificar_whatsapp(nome, email, preco, pay_id, "Cartão", nome_prod)
+        _notificar_whatsapp(nome, email, telefone, preco, pay_id, "Cartão", nome_prod)
         return jsonify({"status": "approved", "payment_id": pay_id})
 
     # Pix pendente — devolve QR code para exibir na página
@@ -158,7 +160,7 @@ def webhook():
             valor  = payment.get("transaction_amount", 0)
             metodo = payment.get("payment_method_id", "—")
             desc   = payment.get("description", "—")
-            _notificar_whatsapp(nome, email, valor, pay_id, metodo, desc)
+            _notificar_whatsapp(nome, email, "—", valor, pay_id, metodo, desc)
     return jsonify({"status": "ok"}), 200
 
 # --- Página de sucesso ---
@@ -171,12 +173,60 @@ def sucesso():
     html = html.replace('{{PAYMENT_ID}}', pay_id)
     return html
 
+# --- Agendamento confirmado via Calendly ---
+@app.route('/api/agendamento-confirmado', methods=['POST'])
+def agendamento_confirmado():
+    from datetime import datetime, timezone, timedelta
+    data        = request.json or {}
+    nome        = data.get('nome',        '—')
+    email       = data.get('email',       '—')
+    telefone    = data.get('telefone',    '—')
+    produto     = data.get('produto',     '—')
+    event_uri   = data.get('event_uri',   '')
+    data_hora   = "Ver no Calendly"
+
+    # Busca data/hora via API do Calendly (requer CALENDLY_TOKEN)
+    if event_uri and CALENDLY_TOKEN:
+        try:
+            r = req.get(event_uri,
+                        headers={'Authorization': f'Bearer {CALENDLY_TOKEN}',
+                                 'Content-Type': 'application/json'},
+                        timeout=6)
+            if r.ok:
+                ev = r.json().get('resource', {})
+                start = ev.get('start_time', '')
+                if start:
+                    dt  = datetime.fromisoformat(start.replace('Z', '+00:00'))
+                    brt = dt.astimezone(timezone(timedelta(hours=-3)))
+                    data_hora = brt.strftime('%d/%m/%Y às %H:%M')
+        except Exception as e:
+            print(f"[Calendly API] {e}")
+
+    msg = (
+        f"📅 *SESSÃO AGENDADA!*\n\n"
+        f"👤 Nome: {nome}\n"
+        f"📱 WhatsApp: {telefone}\n"
+        f"📧 Email: {email}\n"
+        f"💆 Produto: {produto}\n"
+        f"🕐 Data/Hora: {data_hora}"
+    )
+    try:
+        req.get(
+            "https://api.callmebot.com/whatsapp.php",
+            params={"phone": CALLMEBOT_PHONE, "text": msg, "apikey": CALLMEBOT_APIKEY},
+            timeout=10
+        )
+    except Exception as e:
+        print(f"[WhatsApp Calendly] {e}")
+    return jsonify({"ok": True})
+
 # --- CallMeBot ---
-def _notificar_whatsapp(nome, email, valor, pay_id, metodo, produto="—"):
+def _notificar_whatsapp(nome, email, telefone, valor, pay_id, metodo, produto="—"):
     msg = (
         f"✅ *VENDA REALIZADA!*\n\n"
         f"🛒 Produto: {produto}\n"
         f"👤 Nome: {nome}\n"
+        f"📱 WhatsApp: {telefone}\n"
         f"📧 Email: {email}\n"
         f"💳 Método: {metodo}\n"
         f"💰 Valor: R$ {float(valor):.2f}\n"

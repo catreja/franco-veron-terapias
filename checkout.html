@@ -235,6 +235,10 @@
                     <label for="email">E-mail</label>
                     <input type="email" id="email" placeholder="email@exemplo.com" autocomplete="email">
                 </div>
+                <div class="fg full" style="margin-top:14px;">
+                    <label for="telefone">WhatsApp (com DDD)</label>
+                    <input type="tel" id="telefone" placeholder="(83) 99999-9999" autocomplete="tel">
+                </div>
                 <div class="co-error" id="coError"></div>
                 <button class="btn-continuar" id="btnContinuar" onclick="confirmarDados()">
                     Continuar para o pagamento <i class="fas fa-arrow-right"></i>
@@ -396,10 +400,13 @@ async function confirmarDados() {
     const email     = document.getElementById('email').value.trim();
     document.getElementById('coError').classList.remove('show');
 
+    const telefone = document.getElementById('telefone').value.trim();
+
     if (!nome)                          { mostrarErro('Informe seu nome.');          return; }
     if (!email || !email.includes('@')) { mostrarErro('Informe um e-mail válido.'); return; }
+    if (!telefone)                      { mostrarErro('Informe seu WhatsApp.');      return; }
 
-    dadosComprador = { nome: nome + (sobrenome ? ' ' + sobrenome : ''), email };
+    dadosComprador = { nome: nome + (sobrenome ? ' ' + sobrenome : ''), email, telefone };
 
     document.getElementById('dadosComprador').style.display  = 'none';
     document.getElementById('secaoPagamento').style.display  = '';
@@ -504,6 +511,7 @@ async function criarBrick() {
                     ...formData,
                     nome:       dadosComprador.nome,
                     email:      dadosComprador.email,
+                    telefone:   dadosComprador.telefone || '',
                     produto_id: pid,
                 };
 
@@ -629,6 +637,25 @@ function mostrarSucesso(paymentId) {
         btn.style.display = 'inline-flex';
     }
 }
+
+// ── Listener do Calendly: dispara quando cliente confirma agendamento ──
+window.addEventListener('message', function(e) {
+    if (e.data && e.data.event === 'calendly.event_scheduled') {
+        const pid = new URLSearchParams(location.search).get('produto') || 'plano';
+        fetch('/api/agendamento-confirmado', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                nome:        dadosComprador.nome     || '—',
+                email:       dadosComprador.email    || '—',
+                telefone:    dadosComprador.telefone || '—',
+                produto:     pid,
+                event_uri:   e.data.payload?.event?.uri     || '',
+                invitee_uri: e.data.payload?.invitee?.uri   || '',
+            })
+        });
+    }
+});
 
 function lançarConfetti() {
     const cores = ['#c5a059','#e8c682','#fdfbf7'];
