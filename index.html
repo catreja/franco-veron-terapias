@@ -323,6 +323,55 @@
         </div>
     </footer>
 
+    <!-- ===== MUSIC PLAYER ===== -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="Vital flow sound.mp3" type="audio/mpeg">
+    </audio>
+
+    <button id="musicBtn" aria-label="Tocar música ambiente" title="Música ambiente">
+        <svg id="iconPlay" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M9 18V5l12 6.5L9 18z"/><path d="M9 18V5l12 6.5L9 18z" opacity="0"/><path d="M9 18V5l12 6.5L9 18z"/></svg>
+        <svg id="iconNote" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+        <svg id="iconPause" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+        <span id="musicLabel">Música</span>
+    </button>
+
+    <style>
+        #musicBtn {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(10, 8, 5, 0.85);
+            border: 1px solid rgba(197, 160, 89, 0.35);
+            color: var(--color-gold, #c5a059);
+            padding: 0.55rem 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            backdrop-filter: blur(8px);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+        }
+        #musicBtn:hover {
+            background: rgba(197, 160, 89, 0.15);
+            border-color: rgba(197, 160, 89, 0.7);
+            transform: translateY(-2px);
+        }
+        #musicBtn.playing {
+            border-color: rgba(197, 160, 89, 0.6);
+            background: rgba(197, 160, 89, 0.1);
+        }
+        @media (max-width: 768px) {
+            #musicBtn { bottom: 1.2rem; left: 1.2rem; padding: 0.5rem 0.8rem; font-size: 0.6rem; }
+        }
+    </style>
+
     <script src="script.js"></script>
     <script>
         function abrirWhatsApp(mensagem) {
@@ -386,6 +435,47 @@
             });
         }, observerOpts);
         sections.forEach(s => sectionObserver.observe(s));
+    </script>
+
+    <script>
+        // ===== MUSIC PLAYER =====
+        const music = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicBtn');
+        const iconPlay = document.getElementById('iconPlay');
+        const iconNote = document.getElementById('iconNote');
+        const iconPause = document.getElementById('iconPause');
+        const musicLabel = document.getElementById('musicLabel');
+        let isPlaying = false;
+        let userInteracted = false;
+
+        music.volume = 0.25;
+
+        function setPlaying(state) {
+            isPlaying = state;
+            musicBtn.classList.toggle('playing', state);
+            iconPlay.style.display = state ? 'none' : 'block';
+            iconNote.style.display = state ? 'block' : 'none';
+            iconPause.style.display = 'none';
+            musicLabel.textContent = state ? 'Pausar' : 'Música';
+        }
+
+        musicBtn.addEventListener('click', () => {
+            userInteracted = true;
+            if (isPlaying) {
+                music.pause();
+                setPlaying(false);
+            } else {
+                music.play().then(() => setPlaying(true)).catch(() => {});
+            }
+        });
+
+        // Tenta tocar automaticamente após primeira interação do usuário na página
+        document.addEventListener('click', function autoPlay() {
+            if (!userInteracted) {
+                music.play().then(() => { setPlaying(true); userInteracted = true; }).catch(() => {});
+            }
+            document.removeEventListener('click', autoPlay);
+        }, { once: true });
     </script>
 </body>
 
