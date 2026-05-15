@@ -15,6 +15,16 @@
         rel="stylesheet">
 
     <link rel="stylesheet" href="style.css">
+
+    <!-- Three.js importmap -->
+    <script type="importmap">
+    {
+      "imports": {
+        "three":          "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/":  "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+    </script>
 </head>
 
 <body>
@@ -100,6 +110,38 @@
             </div>
         </div>
     </section>
+
+    <!-- ===== MAPA MUSCULAR 3D ===== -->
+    <section class="body-map-section" id="mapa-muscular">
+        <div class="container">
+            <div class="section-title scroll-reveal" style="text-align:center;">
+                <span style="font-family:var(--font-body);font-size:0.65rem;letter-spacing:3px;text-transform:uppercase;color:var(--color-gold);">Explore</span>
+                <h2 style="margin-top:0.5rem;">Mapa Muscular</h2>
+                <div class="divider center"></div>
+                <p class="body-map-subtitle">Gire o corpo com o mouse ou o dedo · Passe sobre um músculo para iluminá-lo · Clique para ver as dicas em vídeo</p>
+            </div>
+            <div class="body-map-wrapper scroll-reveal">
+                <div id="bodyMapContainer">
+                    <canvas id="bodyCanvas"></canvas>
+                    <div id="muscleTooltip" class="muscle-tooltip"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal YouTube -->
+    <div id="ytModal" class="yt-modal">
+        <div class="yt-modal-inner">
+            <div class="yt-modal-header">
+                <h3 id="ytTitle"></h3>
+                <button id="ytClose">✕</button>
+            </div>
+            <div class="yt-frame-wrapper">
+                <iframe id="ytFrame" src="" frameborder="0"
+                    allow="autoplay; encrypted-media" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
 
     <section class="services section-padding" id="servicos">
         <div class="container">
@@ -372,6 +414,7 @@
         }
     </style>
 
+    <script type="module" src="body-map.js"></script>
     <script src="script.js"></script>
     <script>
         function abrirWhatsApp(mensagem) {

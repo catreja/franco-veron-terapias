@@ -1274,3 +1274,141 @@ footer {
 
     .footer-links { gap: 1.2rem; }
 }
+
+/* ================================================================
+   MAPA MUSCULAR 3D
+   ================================================================ */
+.body-map-section {
+    background: #000;
+    padding: 90px 0 70px;
+}
+.body-map-subtitle {
+    font-size: 0.72rem;
+    color: var(--color-text-muted);
+    letter-spacing: 1.2px;
+    margin-top: 0.9rem;
+    max-width: 540px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.8;
+    text-align: center;
+}
+.body-map-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 2.5rem;
+}
+#bodyMapContainer {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    height: 580px;
+}
+#bodyCanvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    cursor: grab;
+    border-radius: 12px;
+}
+#bodyCanvas:active { cursor: grabbing; }
+
+/* Tooltip muscular */
+.muscle-tooltip {
+    position: absolute;
+    top: 0; left: 0;
+    background: rgba(4, 6, 18, 0.92);
+    border: 1px solid rgba(0, 170, 255, 0.45);
+    color: #fff;
+    padding: 0.55rem 1rem;
+    border-radius: 8px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    max-width: 190px;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 0 18px rgba(0, 170, 255, 0.25);
+    z-index: 10;
+}
+.muscle-tooltip strong {
+    display: block;
+    color: #00ddff;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 0.2rem;
+}
+
+/* Modal YouTube */
+.yt-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.88);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+.yt-modal.open {
+    opacity: 1;
+    pointer-events: all;
+}
+.yt-modal-inner {
+    width: 92%;
+    max-width: 820px;
+    background: #07080f;
+    border: 1px solid rgba(0, 170, 255, 0.3);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 0 60px rgba(0, 100, 255, 0.25), 0 20px 60px rgba(0,0,0,0.8);
+}
+.yt-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid rgba(0, 170, 255, 0.15);
+}
+.yt-modal-header h3 {
+    color: #00ccff;
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin: 0;
+    font-family: var(--font-body);
+}
+#ytClose {
+    background: none;
+    border: 1px solid rgba(0, 170, 255, 0.35);
+    color: #00ccff;
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+#ytClose:hover { background: rgba(0, 170, 255, 0.15); }
+.yt-frame-wrapper {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+}
+.yt-frame-wrapper iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+@media (max-width: 600px) {
+    #bodyMapContainer { height: 460px; }
+}
