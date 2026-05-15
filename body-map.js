@@ -54,9 +54,9 @@ const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
 const bloom = new UnrealBloomPass(
   new THREE.Vector2(cW(), cH()),
-  2.2,   // strength  — intensidade do brilho
-  0.55,  // radius    — raio do bloom
-  0.10   // threshold — mínimo emissivo para ativar bloom
+  0.85,  // strength  — reduzido (era 2.2)
+  0.30,  // radius    — raio do bloom
+  0.25   // threshold — mais seletivo (era 0.10)
 );
 composer.addPass(bloom);
 
@@ -142,8 +142,8 @@ const FRAG = /* glsl */`
 
     // — Cor final —
     vec3 col = uBase
-             + uRim    * fresnel   * 2.8
-             + uEnergy * pattern;
+             + uRim    * fresnel   * 1.6
+             + uEnergy * pattern   * 0.7;
 
     // — Alpha: borda brilhante + padrão —
     float alpha = uOpacity
@@ -157,10 +157,10 @@ const FRAG = /* glsl */`
 // Uniforms compartilhados entre todos os meshes
 const sharedUniforms = {
   uTime:    { value: 0 },
-  uBase:    { value: new THREE.Color(0x001433) },
-  uRim:     { value: new THREE.Color(0x00aaff) },
-  uEnergy:  { value: new THREE.Color(0x00ffff) },
-  uOpacity: { value: 0.18 },
+  uBase:    { value: new THREE.Color(0x001e55) },
+  uRim:     { value: new THREE.Color(0x0066cc) },
+  uEnergy:  { value: new THREE.Color(0x00aadd) },
+  uOpacity: { value: 0.38 },   // mais opaco = mais definição
 };
 
 function makeHoloMat() {
@@ -250,42 +250,90 @@ tryLoad(0);
 // CORPO PROCEDURAL (fallback com mesmo shader)
 // ================================================================
 function buildProcedural() {
-  const ell = (rx,ry,rz) => { const g=new THREE.SphereGeometry(1,24,18); g.scale(rx,ry,rz); return g; };
-  const cyl = (rt,rb,h,s=18) => new THREE.CylinderGeometry(rt,rb,h,s);
+  const ell = (rx,ry,rz) => { const g=new THREE.SphereGeometry(1,28,20); g.scale(rx,ry,rz); return g; };
+  const cyl = (rt,rb,h,s=20) => new THREE.CylinderGeometry(rt,rb,h,s);
   const add = (geo,x,y,z,rx=0,ry=0,rz=0) => {
     const m4=new THREE.Matrix4().compose(new THREE.Vector3(x,y,z),new THREE.Quaternion().setFromEuler(new THREE.Euler(rx,ry,rz)),new THREE.Vector3(1,1,1));
     geo.applyMatrix4(m4);
     const mesh=new THREE.Mesh(geo,makeHoloMat());
-    mesh.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo,20),edgeMat.clone()));
+    mesh.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo,18),edgeMat.clone()));
     bodyGroup.add(mesh);
   };
-  add(ell(0.150,0.188,0.155),0,1.810,0);
-  add(cyl(0.078,0.094,0.230,14),0,1.658,0);
-  add(ell(0.310,0.078,0.178),0,1.548,-0.028);
-  add(cyl(0.272,0.268,0.155,22),0,1.525,0);
+  // CABEÇA
+  add(ell(0.148,0.185,0.152), 0, 1.810, 0);
+  // PESCOÇO muscular
+  add(cyl(0.082,0.100,0.220,16), 0, 1.655, 0);
+  // TRAPÉZIO — largo e pronunciado
+  add(ell(0.350,0.090,0.200), 0, 1.548,-0.035);
+  // PEITO SUPERIOR
+  add(cyl(0.290,0.285,0.160,24), 0, 1.522, 0);
+  // PEITORAIS — grandes e salientes
+  add(ell(0.200,0.130,0.170),-0.138,1.420,0.155);
+  add(ell(0.200,0.130,0.170), 0.138,1.420,0.155);
+  // TRONCO em 4 segmentos com boa curvatura
+  add(cyl(0.278,0.268,0.250,24), 0, 1.388, 0);
+  add(cyl(0.258,0.235,0.240,24), 0, 1.148, 0);
+  add(cyl(0.225,0.205,0.225,24), 0, 0.945, 0);  // cintura
+  add(cyl(0.235,0.250,0.240,24), 0, 0.742, 0);  // pelve
+  // ABDÔMEN — 6 blocos definidos
   [-1,1].forEach(s=>{
-    add(ell(0.162,0.108,0.138),s*.118,1.432,0.130);
-    add(ell(0.150,0.215,0.098),s*.278,1.245,-0.068);
-    add(ell(0.155,0.128,0.115),s*.124,0.705,-0.118);
-    add(ell(0.145,0.135,0.130),s*.308,1.555,0);
-    add(cyl(0.088,0.074,0.455,14),s*.382,1.238,0,0,0,s*.25);
-    add(ell(0.084,0.075,0.084),s*.418,1.295,0.092,0,0,s*.25);
-    add(ell(0.078,0.098,0.074),s*.410,1.212,-0.092,0,0,s*.23);
-    add(cyl(0.070,0.052,0.438,12),s*.465,0.860,0,0,0,s*.14);
-    add(ell(0.062,0.054,0.046),s*.524,0.638,0);
-    add(cyl(0.130,0.115,0.585,18),s*.134,0.578,0);
-    add(ell(0.110,0.175,0.098),s*.134,0.580,0.102);
-    add(ell(0.098,0.158,0.084),s*.134,0.565,-0.102);
-    add(ell(0.108,0.100,0.102),s*.134,0.278,0.040);
-    add(cyl(0.100,0.070,0.518,16),s*.134,0.008,0);
-    add(ell(0.088,0.146,0.082),s*.134,0.118,-0.088);
-    add(ell(0.070,0.060,0.070),s*.134,-0.275,0);
-    add(ell(0.067,0.036,0.142),s*.134,-0.314,0.075);
+    add(ell(0.075,0.055,0.065),s*0.062,1.230,0.195);
+    add(ell(0.075,0.055,0.065),s*0.062,1.100,0.192);
+    add(ell(0.072,0.052,0.062),s*0.062,0.970,0.188);
   });
-  add(cyl(0.255,0.245,0.245,22),0,1.392,0);
-  add(cyl(0.238,0.220,0.235,22),0,1.158,0);
-  add(cyl(0.215,0.200,0.218,22),0,0.958,0);
-  add(cyl(0.220,0.232,0.235,22),0,0.750,0);
+  // SERRÁTIL / OBLÍQUOS
+  add(ell(0.078,0.168,0.088),-0.252,1.240,0.055);
+  add(ell(0.078,0.168,0.088), 0.252,1.240,0.055);
+  // DORSAIS / LATÍSSIMO — muito alargados
+  add(ell(0.175,0.235,0.108),-0.308,1.240,-0.072);
+  add(ell(0.175,0.235,0.108), 0.308,1.240,-0.072);
+  // GLÚTEOS — redondos e definidos
+  add(ell(0.168,0.140,0.128),-0.132,0.705,-0.128);
+  add(ell(0.168,0.140,0.128), 0.132,0.705,-0.128);
+  // DELTÓIDES — esféricos e grandes
+  add(ell(0.165,0.155,0.155),-0.335,1.558, 0);
+  add(ell(0.165,0.155,0.155), 0.335,1.558, 0);
+  // BRAÇO SUPERIOR (tubo)
+  add(cyl(0.098,0.080,0.460,16),-0.415,1.235,0, 0,0, 0.26);
+  add(cyl(0.098,0.080,0.460,16), 0.415,1.235,0, 0,0,-0.26);
+  // BÍCEPS — muito salientes
+  add(ell(0.105,0.092,0.105),-0.455,1.300,0.110, 0,0, 0.26);
+  add(ell(0.105,0.092,0.105), 0.455,1.300,0.110, 0,0,-0.26);
+  // TRÍCEPS — definidos atrás
+  add(ell(0.095,0.115,0.090),-0.448,1.210,-0.108, 0,0, 0.24);
+  add(ell(0.095,0.115,0.090), 0.448,1.210,-0.108, 0,0,-0.24);
+  // ANTEBRAÇO
+  add(cyl(0.082,0.058,0.440,14),-0.498,0.855,0, 0,0, 0.15);
+  add(cyl(0.082,0.058,0.440,14), 0.498,0.855,0, 0,0,-0.15);
+  // MÃOS
+  add(ell(0.065,0.056,0.048),-0.558,0.632,0);
+  add(ell(0.065,0.056,0.048), 0.558,0.632,0);
+  // COXA — muito grossa e musculosa
+  add(cyl(0.148,0.128,0.590,22),-0.148,0.572,0);
+  add(cyl(0.148,0.128,0.590,22), 0.148,0.572,0);
+  // QUADRÍCEPS — 4 cabeças visíveis
+  add(ell(0.132,0.195,0.115),-0.148,0.578,0.118);
+  add(ell(0.132,0.195,0.115), 0.148,0.578,0.118);
+  add(ell(0.088,0.155,0.072),-0.208,0.555,0.095);
+  add(ell(0.088,0.155,0.072), 0.208,0.555,0.095);
+  // ISQUIOTIBIAIS
+  add(ell(0.115,0.175,0.098),-0.148,0.562,-0.115);
+  add(ell(0.115,0.175,0.098), 0.148,0.562,-0.115);
+  // JOELHOS
+  add(ell(0.118,0.108,0.112),-0.148,0.272,0.045);
+  add(ell(0.118,0.108,0.112), 0.148,0.272,0.045);
+  // PERNA INFERIOR
+  add(cyl(0.112,0.075,0.522,18),-0.148,0.005,0);
+  add(cyl(0.112,0.075,0.522,18), 0.148,0.005,0);
+  // PANTURRILHA — grande
+  add(ell(0.105,0.165,0.098),-0.148,0.125,-0.098);
+  add(ell(0.105,0.165,0.098), 0.148,0.125,-0.098);
+  // TORNOZELOS
+  add(ell(0.075,0.065,0.075),-0.148,-0.278,0);
+  add(ell(0.075,0.065,0.075), 0.148,-0.278,0);
+  // PÉS
+  add(ell(0.070,0.038,0.148),-0.148,-0.318,0.078);
+  add(ell(0.070,0.038,0.148), 0.148,-0.318,0.078);
 }
 
 // ================================================================
@@ -413,10 +461,10 @@ function animate(){
   sharedUniforms.uTime.value=t;
 
   // Opacidade do shader pulsa suavemente
-  sharedUniforms.uOpacity.value=0.16+0.06*Math.sin(t*0.9);
+  sharedUniforms.uOpacity.value=0.36+0.04*Math.sin(t*0.9);
 
   // Intensidade do bloom pulsa
-  bloom.strength=2.0+0.4*Math.sin(t*0.7);
+  bloom.strength=0.75+0.12*Math.sin(t*0.7);
 
   // Hotspot pulse
   MUSCLES.forEach(m=>{
