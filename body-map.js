@@ -214,9 +214,9 @@ function applyHolo(model) {
   const sz  = box.getSize(new THREE.Vector3());
   const ct  = box.getCenter(new THREE.Vector3());
 
-  // Escala: altura alvo 1.82 unidades; corpo 15% mais largo para parecer musculoso
+  // Escala uniforme — altura alvo 1.82 unidades
   const scl = 1.82 / sz.y;
-  model.scale.set(scl * 1.14, scl, scl * 1.10);
+  model.scale.setScalar(scl);
 
   // Recalcula bounding box após escala para centrar corretamente
   model.updateMatrixWorld(true);
