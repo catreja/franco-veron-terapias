@@ -117,40 +117,52 @@ const FRAG = /* glsl */`
   uniform float uOpacity;
 
   // ── destaque muscular bilateral ──
-  uniform vec3  uHlC;      // centro elipsoide (lado A)
-  uniform vec3  uHlC2;     // centro elipsoide (lado B — mirror X)
-  uniform vec3  uHlS;      // meios-eixos elipsoide
-  uniform float uHlStr;    // 0=nenhum  1=máximo
+  uniform vec3  uHlC;
+  uniform vec3  uHlC2;
+  uniform vec3  uHlS;
+  uniform float uHlStr;
 
   float pulse(float v, float sh){ return pow(max(sin(v)*.5+.5,0.),sh); }
 
   void main(){
     vec3 viewDir = normalize(cameraPosition - vWorldPos);
-    float fresnel = pow(1. - max(dot(vNormal,viewDir),0.), 2.5);
+    float fresnel = pow(1. - max(dot(vNormal,viewDir),0.), 2.2);
 
     float scanH = pulse(vWorldPos.y*18. + uTime*2.,   8.);
     float lineA = pulse(vWorldPos.y*9.  + vWorldPos.x*3. + uTime*1.4, 12.);
     float lineB = pulse(vWorldPos.y*6.  - vWorldPos.z*4. + uTime*.9,   9.);
     float node  = pulse(vWorldPos.y*22. + uTime*3., 18.)
                 * pulse(vWorldPos.x*14. - uTime*1.5, 18.);
-    float pat   = scanH*.35 + lineA*.25 + lineB*.25 + node*.5;
+    float pat   = scanH*.28 + lineA*.20 + lineB*.20 + node*.40;
 
-    vec3  col   = uBase + uRim*fresnel*1.6 + uEnergy*pat*.7;
-    float alpha = uOpacity + fresnel*.5 + pat*.3;
+    vec3  col   = uBase + uRim*fresnel*1.4 + uEnergy*pat*.6;
+    float alpha = uOpacity + fresnel*.38 + pat*.22;
 
-    // ── elipsoide bilateral ──
+    // ── contorno vermelho bilateral no hover ──
     if(uHlStr > .001){
-      vec3 dA = (vWorldPos - uHlC)  / max(uHlS, vec3(.001));
-      vec3 dB = (vWorldPos - uHlC2) / max(uHlS, vec3(.001));
-      float hlF = max(
-        1. - smoothstep(.45, 1.35, length(dA)),
-        1. - smoothstep(.45, 1.35, length(dB))
-      ) * uHlStr;
+      vec3 dA  = (vWorldPos - uHlC)  / max(uHlS, vec3(.001));
+      vec3 dB  = (vWorldPos - uHlC2) / max(uHlS, vec3(.001));
+      float lA = length(dA);
+      float lB = length(dB);
 
-      // cor ciano intensa + rim boost
-      vec3 hlColor = vec3(0., .95, 1.) + vec3(0., .35, .6)*fresnel*2.;
-      col   = mix(col, hlColor, hlF * .80);
-      alpha += hlF * .50;
+      // Anel na SUPERFÍCIE do elipsoide (len ≈ 1.0) — espessura controlada
+      float ringA = smoothstep(0.55, 1.0, lA) * smoothstep(1.45, 1.0, lA);
+      float ringB = smoothstep(0.55, 1.0, lB) * smoothstep(1.45, 1.0, lB);
+      float ring  = max(ringA, ringB) * uHlStr;
+
+      // Leve preenchimento interno semitransparente
+      float fillA = (1. - smoothstep(0., 1.0, lA));
+      float fillB = (1. - smoothstep(0., 1.0, lB));
+      float fill  = max(fillA, fillB) * uHlStr * 0.10;
+
+      // Pulso do anel
+      float rimBoost = 1.0 + 0.4 * sin(uTime * 6.5);
+
+      vec3 red  = vec3(1.0, 0.05, 0.02) * rimBoost;
+      vec3 rFill= vec3(0.28, 0.0, 0.0);
+      col   = mix(col, red,   ring * 0.95);
+      col   = mix(col, rFill, fill);
+      alpha += ring * 0.72 + fill * 0.08;
     }
 
     gl_FragColor = vec4(col, clamp(alpha,0.,1.));
@@ -166,7 +178,7 @@ const uHlC2  = { value: new THREE.Vector3(0, 999, 0) };
 const uHlS   = { value: new THREE.Vector3(0.1, 0.1, 0.1) };
 const uHlStr = { value: 0.0 };
 
-function makeHoloMat(opacity = 0.44) {
+function makeHoloMat(opacity = 0.72) {
   return new THREE.ShaderMaterial({
     vertexShader:   VERT,
     fragmentShader: FRAG,
@@ -382,6 +394,30 @@ MUSCLES.forEach((m, i) => {
 });
 
 /* ════════════════════════════════════════════════════════════════
+   CONTORNOS MUSCULARES — sempre visíveis, ficam vermelhos no hover
+   ════════════════════════════════════════════════════════════════ */
+MUSCLES.forEach(m => {
+  const [x, y, z]     = m.pos;
+  const [rx, ry, rz]  = m.hl;
+
+  const makeOutline = (ox) => {
+    const geo   = new THREE.SphereGeometry(1, 7, 5);
+    geo.scale(rx, ry, rz);
+    const edges = new THREE.EdgesGeometry(geo);
+    const mat   = new THREE.LineBasicMaterial({
+      color: 0x004466, transparent: true, opacity: 0.35, depthWrite: false
+    });
+    const ls = new THREE.LineSegments(edges, mat);
+    ls.position.set(ox, y, z);
+    bodyGroup.add(ls);
+    return ls;
+  };
+
+  m.outlineA = makeOutline( x);
+  m.outlineB = makeOutline(-x); // bilateral mirror
+});
+
+/* ════════════════════════════════════════════════════════════════
    PLATAFORMA + SCAN LINE + PARTÍCULAS
    ════════════════════════════════════════════════════════════════ */
 const FLOOR_Y = -0.72;
@@ -435,13 +471,19 @@ const setHovered = m => {
     hovered.glowMat.map = glowGold;
     hovered.glow.scale.setScalar(0.14);
     hovered.dotMat.color.set(0xc5a059);
+    // reset outline to subtle cyan
+    if (hovered.outlineA) { hovered.outlineA.material.color.set(0x004466); hovered.outlineA.material.opacity = 0.35; }
+    if (hovered.outlineB) { hovered.outlineB.material.color.set(0x004466); hovered.outlineB.material.opacity = 0.35; }
     applyHighlight(hovered, false);
   }
   hovered = m;
   if (m) {
     m.glowMat.map = glowBlue;
     m.glow.scale.setScalar(0.42);
-    m.dotMat.color.set(0x00eeff);
+    m.dotMat.color.set(0xff1100);
+    // outline turns bright red
+    if (m.outlineA) { m.outlineA.material.color.set(0xff1100); m.outlineA.material.opacity = 0.90; }
+    if (m.outlineB) { m.outlineB.material.color.set(0xff1100); m.outlineB.material.opacity = 0.90; }
     applyHighlight(m, true);
   }
 };
@@ -532,7 +574,13 @@ function animate() {
     m.glowMat.opacity = h
       ? 0.88 + 0.12 * Math.sin(t * 7)
       : 0.28 + 0.28 * Math.sin(t * 2.4 + m._i * 0.9);
-    if (h) m.glow.scale.setScalar(0.32 + 0.09 * Math.sin(t * 6));
+    if (h) {
+      m.glow.scale.setScalar(0.32 + 0.09 * Math.sin(t * 6));
+      // pulse outline opacity
+      const op = 0.65 + 0.35 * Math.sin(t * 6.5);
+      if (m.outlineA) m.outlineA.material.opacity = op;
+      if (m.outlineB) m.outlineB.material.opacity = op;
+    }
   });
 
   // Scan line
