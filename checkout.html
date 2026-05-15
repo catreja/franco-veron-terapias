@@ -175,15 +175,99 @@
         }
         .co-security i { color: #4caf50; }
 
+        /* ── SELOS DE CONFIANÇA ── */
+        .trust-badges {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            margin-top: 14px;
+            flex-wrap: wrap;
+        }
+        .trust-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 8px;
+            padding: 7px 14px;
+        }
+        .trust-badge-ssl {
+            flex-direction: column;
+            gap: 3px;
+            padding: 8px 16px;
+        }
+        .trust-badge-ssl .ssl-top {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .trust-badge-ssl .ssl-top svg { flex-shrink: 0; }
+        .trust-badge-ssl .ssl-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #ccc;
+        }
+        .ssl-green-bar {
+            background: #28a745;
+            border-radius: 4px;
+            padding: 2px 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.58rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: #fff;
+            text-align: center;
+            width: 100%;
+        }
+        .ssl-green-bar span { color: #ffe44d; margin-right: 3px; }
+        .trust-badge-google {
+            gap: 8px;
+        }
+        .trust-badge-google .google-text-wrap {
+            display: flex;
+            flex-direction: column;
+            line-height: 1;
+        }
+        .google-safe-label {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.52rem;
+            letter-spacing: 0.5px;
+            color: #aaa;
+            margin-bottom: 2px;
+        }
+        .google-logo-text {
+            font-family: Arial, sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            line-height: 1;
+        }
+        .google-logo-text .g-blue   { color: #4285F4; }
+        .google-logo-text .g-red    { color: #EA4335; }
+        .google-logo-text .g-yellow { color: #FBBC05; }
+        .google-logo-text .g-green  { color: #34A853; }
+
         /* ── MÉTODOS ── */
         .co-methods { text-align: center; }
-        .co-methods-lbl { font-size: .68rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--color-text-muted); margin-bottom: 8px; }
-        .co-methods-icons { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
-        .co-method-chip {
-            background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08);
-            border-radius: 6px; padding: 5px 12px; font-size: .72rem;
-            color: var(--color-text-muted); display: flex; align-items: center; gap: 5px;
+        .co-methods-lbl { font-size: .68rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--color-text-muted); margin-bottom: 10px; }
+        .co-methods-icons {
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            flex-wrap: wrap;
         }
+        .co-method-logo {
+            height: 28px;
+            width: 72px;
+            object-fit: contain;
+            opacity: 0.65;
+            transition: opacity 0.2s;
+        }
+        .co-method-logo:hover { opacity: 1; }
 
         @media (max-width: 900px) {
             .checkout-grid { grid-template-columns: 1fr; }
@@ -279,14 +363,51 @@
             <div class="co-methods">
                 <p class="co-methods-lbl">Formas de pagamento</p>
                 <div class="co-methods-icons">
-                    <span class="co-method-chip"><i class="fab fa-pix"></i> Pix</span>
-                    <span class="co-method-chip"><i class="far fa-credit-card"></i> Crédito</span>
-                    <span class="co-method-chip"><i class="fas fa-credit-card"></i> Débito</span>
-                    <span class="co-method-chip"><i class="fas fa-barcode"></i> Boleto</span>
+                    <img class="co-method-logo" src="https://cdn.jsdelivr.net/gh/aaronfagan/svg-credit-card-payment-icons/flat/visa.svg" alt="Visa">
+                    <img class="co-method-logo" src="https://cdn.jsdelivr.net/gh/aaronfagan/svg-credit-card-payment-icons/flat/mastercard.svg" alt="Mastercard">
+                    <img class="co-method-logo" src="https://cdn.jsdelivr.net/gh/aaronfagan/svg-credit-card-payment-icons/flat/pix.svg" alt="Pix">
+                    <img class="co-method-logo" src="https://cdn.jsdelivr.net/gh/aaronfagan/svg-credit-card-payment-icons/flat/mercadopago.svg" alt="Mercado Pago">
                 </div>
             </div>
 
             <p class="co-security"><i class="fas fa-lock"></i> Pagamento 100% seguro via Mercado Pago</p>
+
+            <!-- Selos de confiança -->
+            <div class="trust-badges">
+
+                <!-- SSL Certificado -->
+                <div class="trust-badge trust-badge-ssl">
+                    <div class="ssl-top">
+                        <!-- Cadeado SVG -->
+                        <svg width="26" height="30" viewBox="0 0 26 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="2" y="14" width="22" height="15" rx="3" fill="#f5a623"/>
+                            <rect x="4" y="16" width="18" height="11" rx="2" fill="#e8931a"/>
+                            <path d="M8 14V10C8 7.24 10.24 5 13 5C15.76 5 18 7.24 18 10V14" stroke="#555" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                            <circle cx="13" cy="21" r="2.5" fill="#1a1a1a"/>
+                            <rect x="12" y="21" width="2" height="3" rx="1" fill="#1a1a1a"/>
+                        </svg>
+                        <span class="ssl-title">SITE SEGURO</span>
+                    </div>
+                    <div class="ssl-green-bar"><span>SSL</span> CERTIFICADO</div>
+                </div>
+
+                <!-- Google Safe Browsing -->
+                <div class="trust-badge trust-badge-google">
+                    <!-- Escudo SVG -->
+                    <svg width="32" height="36" viewBox="0 0 32 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16 2L3 7V18C3 25.18 8.64 31.9 16 34C23.36 31.9 29 25.18 29 18V7L16 2Z" fill="#2E7D32"/>
+                        <path d="M16 4L5 8.6V18C5 24.3 9.94 30.2 16 32C22.06 30.2 27 24.3 27 18V8.6L16 4Z" fill="#43A047"/>
+                        <path d="M13 22.4L8.6 18L10 16.6L13 19.6L22 10.6L23.4 12L13 22.4Z" fill="white" stroke="white" stroke-width="0.5"/>
+                    </svg>
+                    <div class="google-text-wrap">
+                        <span class="google-safe-label">Safe Browsing</span>
+                        <span class="google-logo-text">
+                            <span class="g-blue">G</span><span class="g-red">o</span><span class="g-yellow">o</span><span class="g-blue">g</span><span class="g-green">l</span><span class="g-red">e</span>
+                        </span>
+                    </div>
+                </div>
+
+            </div>
         </div>
 
     </div>
@@ -323,7 +444,7 @@ const PRODUTO_DISPLAY = {
         priceNote:  '4 sessões mensais · 80 min cada · Domiciliar',
         successMsg: 'Seu <strong>Plano Vital Experience</strong> foi confirmado! Em breve entraremos em contato pelo WhatsApp para agendar suas sessões.',
         btnHtml:    '<i class="fab fa-whatsapp"></i> Falar pelo WhatsApp',
-        btnHref:    () => 'https://wa.me/558387846147?text=Ol%C3%A1%2C+acabei+de+adquirir+o+Plano+Vital+Experience!',
+        btnHref:    () => 'https://wa.me/5583987846147?text=Ol%C3%A1%2C+acabei+de+adquirir+o+Plano+Vital+Experience!',
     },
     'vital-autocuidado': {
         badge:      '<i class="fas fa-layer-group"></i> Pacote 10 Sessões',
@@ -334,7 +455,7 @@ const PRODUTO_DISPLAY = {
         priceNote:  '10 sessões · 80 min cada · Domiciliar',
         successMsg: 'Seu <strong>Pacote Vital Autocuidado</strong> foi confirmado! Em breve entraremos em contato pelo WhatsApp para agendar suas sessões.',
         btnHtml:    '<i class="fab fa-whatsapp"></i> Falar pelo WhatsApp',
-        btnHref:    () => 'https://wa.me/558387846147?text=Ol%C3%A1%2C+acabei+de+adquirir+o+Vital+Autocuidado!',
+        btnHref:    () => 'https://wa.me/5583987846147?text=Ol%C3%A1%2C+acabei+de+adquirir+o+Vital+Autocuidado!',
     },
     'vital-elite': {
         badge:      '<i class="fas fa-crown"></i> Plano Anual · Recomendado',
@@ -345,7 +466,7 @@ const PRODUTO_DISPLAY = {
         priceNote:  '48 sessões · 80 min cada · Domiciliar · Preço fixo',
         successMsg: 'Seu <strong>Plano Vital Elite</strong> foi confirmado! Em breve entraremos em contato pelo WhatsApp com todos os detalhes.',
         btnHtml:    '<i class="fab fa-whatsapp"></i> Falar pelo WhatsApp',
-        btnHref:    () => 'https://wa.me/558387846147?text=Ol%C3%A1%2C+acabei+de+adquirir+o+Plano+Vital+Elite!',
+        btnHref:    () => 'https://wa.me/5583987846147?text=Ol%C3%A1%2C+acabei+de+adquirir+o+Plano+Vital+Elite!',
     },
     'gift-card': {
         badge:      '<i class="fas fa-gift"></i> Sessão Avulsa',
@@ -356,7 +477,7 @@ const PRODUTO_DISPLAY = {
         priceNote:  'Voucher enviado por e-mail após confirmação',
         successMsg: 'Seu <strong>Gift Card</strong> foi confirmado! O voucher será enviado para o e-mail informado em até 1 hora.',
         btnHtml:    '<i class="fab fa-whatsapp"></i> Falar pelo WhatsApp',
-        btnHref:    () => 'https://wa.me/558387846147?text=Ol%C3%A1%2C+acabei+de+adquirir+um+Gift+Card!',
+        btnHref:    () => 'https://wa.me/5583987846147?text=Ol%C3%A1%2C+acabei+de+adquirir+um+Gift+Card!',
     },
 };
 

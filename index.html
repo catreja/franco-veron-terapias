@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Franco Veron Terapias | Massoterapeuta em João Pessoa</title>
-    <meta name="description" content="Atendimento terapêutico domiciliar em João Pessoa. Franco Veron, terapeuta holístico com experiência real, toque presente e tratamento 100% personalizado. Agende já.">
+    <meta name="description" content="Massoterapeuta em João Pessoa e Cabedelo. Franco Veron oferece sessões de massagem terapêutica domiciliar, com técnica, presença e tratamento 100% personalizado. Agende já.">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -35,8 +35,8 @@
 
             <!-- Left links -->
             <ul class="nav-links nav-left">
-                <li><a href="#sobre" class="nav-link" data-section="sobre">Sobre</a></li>
-                <li><a href="#servicos" class="nav-link" data-section="servicos">Procedimentos</a></li>
+                <li><a href="#sobre" class="nav-link" data-section="sobre" data-i18n="nav-sobre">Sobre</a></li>
+                <li><a href="#servicos" class="nav-link" data-section="servicos" data-i18n="nav-procedimentos">Procedimentos</a></li>
             </ul>
 
             <!-- Center logo -->
@@ -45,12 +45,21 @@
                 <span class="logo-sub">Massoterapeuta</span>
             </a>
 
-            <!-- Right links + CTA -->
+            <!-- Right links + CTA + Lang switcher -->
             <ul class="nav-links nav-right">
-                <li><a href="#cursos" class="nav-link" data-section="cursos">Cursos</a></li>
-                <li><a href="#contato" class="nav-link" data-section="contato">Contacto</a></li>
-                <li><a href="#" onclick="abrirWhatsApp('Olá, gostaria de reservar uma sessão!'); return false;" class="nav-cta" id="nav-cta-btn">Reservar Sessão</a></li>
+                <li><a href="#cursos" class="nav-link" data-section="cursos" data-i18n="nav-cursos">Cursos</a></li>
+                <li><a href="#contato" class="nav-link" data-section="contato" data-i18n="nav-contato">Contacto</a></li>
+                <li><a href="#" class="nav-cta" id="nav-cta-btn" data-i18n="nav-cta" data-wa-key="wa-reserve">Reservar Sessão</a></li>
             </ul>
+
+            <!-- Language switcher -->
+            <div class="lang-switcher" id="langSwitcher">
+                <button class="lang-btn active" data-lang="pt">PT</button>
+                <span class="lang-sep">|</span>
+                <button class="lang-btn" data-lang="en">EN</button>
+                <span class="lang-sep">|</span>
+                <button class="lang-btn" data-lang="es">ES</button>
+            </div>
 
             <!-- Hamburger (mobile) -->
             <button class="hamburger" id="hamburger" aria-label="Abrir menu" aria-expanded="false">
@@ -60,11 +69,19 @@
 
         <!-- Mobile Drawer -->
         <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
-            <a href="#sobre" class="mob-link" data-section="sobre">Sobre</a>
-            <a href="#servicos" class="mob-link" data-section="servicos">Procedimentos</a>
-            <a href="#cursos" class="mob-link" data-section="cursos">Cursos</a>
-            <a href="#contato" class="mob-link" data-section="contato">Contacto</a>
-            <a href="#" onclick="abrirWhatsApp('Olá, gostaria de reservar uma sessão!'); return false;" class="mob-cta">Reservar Sessão</a>
+            <a href="#sobre" class="mob-link" data-section="sobre" data-i18n="nav-sobre">Sobre</a>
+            <a href="#servicos" class="mob-link" data-section="servicos" data-i18n="nav-procedimentos">Procedimentos</a>
+            <a href="#cursos" class="mob-link" data-section="cursos" data-i18n="nav-cursos">Cursos</a>
+            <a href="#contato" class="mob-link" data-section="contato" data-i18n="nav-contato">Contacto</a>
+            <a href="#" class="mob-cta" data-i18n="nav-cta" data-wa-key="wa-reserve">Reservar Sessão</a>
+            <!-- Mobile lang switcher -->
+            <div class="lang-switcher lang-switcher--mob">
+                <button class="lang-btn active" data-lang="pt">PT</button>
+                <span class="lang-sep">|</span>
+                <button class="lang-btn" data-lang="en">EN</button>
+                <span class="lang-sep">|</span>
+                <button class="lang-btn" data-lang="es">ES</button>
+            </div>
         </div>
     </nav>
 
@@ -75,10 +92,10 @@
         <div class="hero-content fade-in">
             <div class="hero-badge">✦ João Pessoa · Cabedelo, PB ✦</div>
             <h1>Franco Veron Terapias</h1>
-            <p class="description">Mais do que uma sessão de massagem, ofereço uma experiência terapêutica personalizada, com presença, técnica e atenção genuína — no conforto da sua casa.</p>
+            <p class="description" data-i18n="hero-desc">Mais do que uma sessão de massagem, ofereço uma experiência terapêutica personalizada, com presença, técnica e atenção genuína — no conforto da sua casa.</p>
             <div class="hero-actions">
-                <a href="#" onclick="abrirWhatsApp('Olá, gostaria de agendar uma sessão!'); return false;" class="btn-primary" id="hero-cta">Agendar pelo WhatsApp</a>
-                <a href="#sobre" class="btn-ghost">Conhecer mais</a>
+                <a href="#" class="btn-primary" id="hero-cta" data-i18n="hero-cta" data-wa-key="wa-schedule">Agendar pelo WhatsApp</a>
+                <a href="#sobre" class="btn-ghost" data-i18n="hero-ghost">Conhecer mais</a>
             </div>
         </div>
         <div class="hero-scroll-indicator" aria-hidden="true">
@@ -90,17 +107,17 @@
     <section class="about section-padding" id="sobre">
         <div class="container">
             <div class="section-title scroll-reveal" style="text-align:left; margin-bottom: 3rem;">
-                <span style="font-family:var(--font-body); font-size:0.65rem; letter-spacing:3px; text-transform:uppercase; color:var(--color-gold);">A Cerca De</span>
+                <span style="font-family:var(--font-body); font-size:0.65rem; letter-spacing:3px; text-transform:uppercase; color:var(--color-gold);" data-i18n="about-label">A Cerca De</span>
                 <h2 style="margin-top:0.5rem;">Franco Veron</h2>
                 <div class="divider"></div>
             </div>
 
             <div class="about-grid">
                 <div class="about-text scroll-reveal">
-                    <p>Franco Verón é terapeuta holístico e criou uma metodologia própria que combina o melhor das técnicas orientais e ocidentais para proporcionar relaxamento profundo, equilíbrio corporal e bem-estar emocional.</p>
-                    <p>Com mais de 1000 atendimentos anuais, passou a desenvolver sessões adaptadas às necessidades individuais de cada cliente, integrando percepção, domínio técnico e cuidado em cada detalhe.</p>
-                    <p>Atualmente, em João Pessoa, auxilia pessoas que enfrentam sobrecarga mental, dificuldade para dormir, rigidez muscular e desgastes provocados por rotinas intensas ou esforço físico constante.</p>
-                    <p>Seu <em>Vital Flow Method</em> proporciona uma vivência terapêutica diferenciada, voltada à recuperação do corpo, melhora da mobilidade e renovação da energia.</p>
+                    <p data-i18n="about-p1">Franco Verón é terapeuta holístico e criou uma metodologia própria que combina o melhor das técnicas orientais e ocidentais para proporcionar relaxamento profundo, equilíbrio corporal e bem-estar emocional.</p>
+                    <p data-i18n="about-p2">Com mais de 1000 atendimentos anuais, passou a desenvolver sessões adaptadas às necessidades individuais de cada paciente, integrando percepção, domínio técnico e cuidado em cada detalhe.</p>
+                    <p data-i18n="about-p3">Atualmente, em João Pessoa, auxilia pessoas que enfrentam sobrecarga mental, dificuldade para dormir, rigidez muscular e desgastes provocados por rotinas intensas ou esforço físico constante.</p>
+                    <p data-i18n-html="about-p4">Seu <em>Vital Flow Method</em> proporciona uma vivência terapêutica diferenciada, voltada à recuperação do corpo, melhora da mobilidade e renovação da energia.</p>
 
                 </div>
 
@@ -115,10 +132,10 @@
     <section class="body-map-section" id="mapa-muscular">
         <div class="container">
             <div class="section-title scroll-reveal" style="text-align:center;">
-                <span style="font-family:var(--font-body);font-size:0.65rem;letter-spacing:3px;text-transform:uppercase;color:var(--color-gold);">Explore</span>
-                <h2 style="margin-top:0.5rem;">Mapa Muscular</h2>
+                <span style="font-family:var(--font-body);font-size:0.65rem;letter-spacing:3px;text-transform:uppercase;color:var(--color-gold);" data-i18n="bodymap-label">Explore</span>
+                <h2 style="margin-top:0.5rem;" data-i18n="bodymap-title">Mapa Muscular</h2>
                 <div class="divider center"></div>
-                <p class="body-map-subtitle">Gire o corpo com o mouse ou o dedo · Passe sobre um músculo para iluminá-lo · Clique para ver as dicas em vídeo</p>
+                <p class="body-map-subtitle" data-i18n="bodymap-subtitle">Gire o corpo com o mouse ou o dedo · Passe sobre um músculo para iluminá-lo · Clique para ver as dicas em vídeo</p>
             </div>
             <div class="body-map-wrapper scroll-reveal">
                 <div id="bodyMapContainer">
@@ -146,7 +163,7 @@
     <section class="services section-padding" id="servicos">
         <div class="container">
             <div class="section-title scroll-reveal">
-                <h2>Procedimentos & Planos</h2>
+                <h2 data-i18n="services-title">Procedimentos & Planos</h2>
                 <div class="divider center"></div>
             </div>
 
@@ -155,85 +172,85 @@
                 <!-- ESSENTIEL -->
                 <div class="plan-card scroll-reveal">
                     <div class="plan-header">
-                        <span class="plan-label">Plano Mensal</span>
+                        <span class="plan-label" data-i18n="plan1-label">Plano Mensal</span>
                         <h3 class="plan-name">Vital Experience</h3>
                         <div class="plan-price">
                             <span class="plan-amount">R$ 1.200</span>
-                            <span class="plan-period">/mês · 4 sessões</span>
+                            <span class="plan-period" data-i18n="plan1-period">/mês · 4 sessões</span>
                         </div>
-                        <p class="plan-detail">80 min · Domiciliar · Transporte incluído</p>
+                        <p class="plan-detail" data-i18n="plan1-detail">80 min · Domiciliar · Transporte incluído</p>
                     </div>
                     <ul class="plan-features">
-                        <li>Massagem Relaxante</li>
-                        <li>Massagem Esportiva</li>
-                        <li>Drenagem Linfática</li>
-                        <li>Reflexologia Podal</li>
-                        <li>Aromaterapia</li>
-                        <li>Massagem Ayurvédica</li>
-                        <li>Shiatsu</li>
+                        <li data-i18n="plan1-f1">Massagem Relaxante</li>
+                        <li data-i18n="plan1-f2">Massagem Esportiva</li>
+                        <li data-i18n="plan1-f3">Drenagem Linfática</li>
+                        <li data-i18n="plan1-f4">Reflexologia Podal</li>
+                        <li data-i18n="plan1-f5">Aromaterapia</li>
+                        <li data-i18n="plan1-f6">Massagem Ayurvédica</li>
+                        <li data-i18n="plan1-f7">Shiatsu</li>
                     </ul>
-                    <a href="/checkout?produto=vital-experience" class="plan-cta">Reservar</a>
+                    <a href="/checkout?produto=vital-experience" class="plan-cta" data-i18n="plan-cta">Reservar</a>
                 </div>
 
                 <!-- PRESTIGE -->
                 <div class="plan-card scroll-reveal">
                     <div class="plan-header">
-                        <span class="plan-label">Pacote 10 Sessões</span>
+                        <span class="plan-label" data-i18n="plan2-label">Pacote 10 Sessões</span>
                         <h3 class="plan-name">Vital Autocuidado</h3>
                         <div class="plan-price">
                             <span class="plan-amount">R$ 2.500</span>
-                            <span class="plan-period">· 10 sessões</span>
+                            <span class="plan-period" data-i18n="plan2-period">· 10 sessões</span>
                         </div>
-                        <p class="plan-detail">80 min · Domiciliar · Transporte incluído</p>
+                        <p class="plan-detail" data-i18n="plan2-detail">80 min · Domiciliar · Transporte incluído</p>
                     </div>
                     <ul class="plan-features">
-                        <li>Tudo do Vital Experience, mais:</li>
-                        <li class="feature-extra">Ventosa Terapia</li>
-                        <li class="feature-extra">Pedras Quentes</li>
-                        <li class="feature-extra">Alongamentos & Mobilidade</li>
-                        <li class="feature-extra">Agenda fixa garantida</li>
-                        <li class="feature-extra">WhatsApp direto</li>
+                        <li data-i18n="plan2-f1">Tudo do Vital Experience, mais:</li>
+                        <li class="feature-extra" data-i18n="plan2-f2">Ventosa Terapia</li>
+                        <li class="feature-extra" data-i18n="plan2-f3">Pedras Quentes</li>
+                        <li class="feature-extra" data-i18n="plan2-f4">Alongamentos & Mobilidade</li>
+                        <li class="feature-extra" data-i18n="plan2-f5">Agenda fixa garantida</li>
+                        <li class="feature-extra" data-i18n="plan2-f6">WhatsApp direto</li>
                     </ul>
-                    <a href="/checkout?produto=vital-autocuidado" class="plan-cta">Reservar</a>
+                    <a href="/checkout?produto=vital-autocuidado" class="plan-cta" data-i18n="plan-cta">Reservar</a>
                 </div>
 
                 <!-- ÉLITE -->
                 <div class="plan-card plan-card--featured scroll-reveal">
-                    <div class="plan-badge">Recomendado</div>
+                    <div class="plan-badge" data-i18n="plan3-badge">Recomendado</div>
                     <div class="plan-header">
-                        <span class="plan-label">Plano Anual</span>
+                        <span class="plan-label" data-i18n="plan3-label">Plano Anual</span>
                         <h3 class="plan-name">Vital Elite</h3>
                         <div class="plan-price">
                             <span class="plan-amount">R$ 10.999</span>
-                            <span class="plan-period">/ano · 48 sessões</span>
+                            <span class="plan-period" data-i18n="plan3-period">/ano · 48 sessões</span>
                         </div>
-                        <p class="plan-detail">80 min · Domiciliar · Transporte incluído</p>
+                        <p class="plan-detail" data-i18n="plan3-detail">80 min · Domiciliar · Transporte incluído</p>
                     </div>
                     <ul class="plan-features">
-                        <li>Tudo do Vital Autocuidado, mais:</li>
-                        <li class="feature-extra">✦ Spa Day Exclusivo</li>
-                        <li class="feature-extra">Preço congelado 12 meses</li>
-                        <li class="feature-extra">Prioridade máxima</li>
+                        <li data-i18n="plan3-f1">Tudo do Vital Autocuidado, mais:</li>
+                        <li class="feature-extra" data-i18n="plan3-f2">✦ Spa Day Exclusivo</li>
+                        <li class="feature-extra" data-i18n="plan3-f3">Preço congelado 12 meses</li>
+                        <li class="feature-extra" data-i18n="plan3-f4">Prioridade máxima</li>
                     </ul>
-                    <a href="/checkout?produto=vital-elite" class="plan-cta plan-cta--featured">Reservar</a>
+                    <a href="/checkout?produto=vital-elite" class="plan-cta plan-cta--featured" data-i18n="plan-cta">Reservar</a>
                 </div>
 
             </div>
 
-            <p class="plans-footnote scroll-reveal">Atendimento domiciliar personalizado · Transporte incluído · João Pessoa & Cabedelo</p>
+            <p class="plans-footnote scroll-reveal" data-i18n="plans-footnote">Atendimento domiciliar personalizado · Transporte incluído · João Pessoa & Cabedelo</p>
 
             <!-- GIFT CARD -->
             <div class="gift-card scroll-reveal">
                 <div class="gift-card-inner">
                     <div class="gift-card-left">
-                        <span class="gift-tag">✦ Sessão Avulsa</span>
+                        <span class="gift-tag" data-i18n="gift-tag">✦ Sessão Avulsa</span>
                         <h3 class="gift-title">Gift Card</h3>
-                        <p class="gift-desc">Ofereça uma experiência completa. O Gift Card dá acesso a qualquer procedimento do nosso catálogo — incluindo todos os serviços do plano Vital Elite — em uma única sessão inesquecível.</p>
+                        <p class="gift-desc" data-i18n="gift-desc">Ofereça uma experiência completa. O Gift Card dá acesso a qualquer procedimento do nosso catálogo — incluindo todos os serviços do plano Vital Elite — em uma única sessão inesquecível.</p>
                     </div>
                     <div class="gift-card-right">
                         <span class="gift-price">R$ 399</span>
-                        <span class="gift-price-label">sessão única · todos os procedimentos</span>
-                        <a href="/checkout?produto=gift-card" class="plan-cta plan-cta--featured">Adquirir Gift Card</a>
+                        <span class="gift-price-label" data-i18n="gift-price-label">sessão única · todos os procedimentos</span>
+                        <a href="/checkout?produto=gift-card" class="plan-cta plan-cta--featured" data-i18n="gift-cta">Adquirir Gift Card</a>
                     </div>
                 </div>
             </div>
@@ -252,44 +269,44 @@
             <!-- Direita: título + cards -->
             <div class="cursos-split-content">
                 <div class="section-title scroll-reveal" style="text-align:left;">
-                    <h2>Cursos</h2>
+                    <h2 data-i18n="courses-title">Cursos</h2>
                     <div class="divider"></div>
-                    <p>Aprenda com quem pratica. Formações online com técnica real e aplicação imediata.</p>
+                    <p data-i18n="courses-subtitle">Aprenda com quem pratica. Formações online com técnica real e aplicação imediata.</p>
                 </div>
 
                 <div class="cursos-grid cursos-grid--two">
 
                 <!-- Método Vital Flow -->
                 <div class="curso-card curso-card--featured scroll-reveal">
-                    <div class="curso-badge">Online</div>
+                    <div class="curso-badge" data-i18n="course1-badge">Online</div>
                     <div class="curso-icon">◈</div>
-                    <h3 class="curso-title">Método Vital Flow</h3>
-                    <p class="curso-desc">Aprenda a aplicar uma sequência terapêutica completa que integra técnicas de massagem, manejo do toque e leitura corporal — para aliviar tensões, restaurar o fluxo e gerar bem-estar real em quem você atende.</p>
+                    <h3 class="curso-title" data-i18n="course1-title">Método Vital Flow</h3>
+                    <p class="curso-desc" data-i18n="course1-desc">Aprenda a aplicar uma sequência terapêutica completa que integra técnicas de massagem, manejo do toque e leitura corporal — para aliviar tensões, restaurar o fluxo e gerar bem-estar real em quem você atende.</p>
                     <ul class="curso-includes">
-                        <li>Teoria completa em vídeo</li>
-                        <li>Módulos práticos demonstrados</li>
-                        <li>Exame final</li>
-                        <li>Certificado de conclusão</li>
-                        <li>Acesso vitalício ao conteúdo</li>
+                        <li data-i18n="course1-f1">Teoria completa em vídeo</li>
+                        <li data-i18n="course1-f2">Módulos práticos demonstrados</li>
+                        <li data-i18n="course1-f3">Exame final</li>
+                        <li data-i18n="course1-f4">Certificado de conclusão</li>
+                        <li data-i18n="course1-f5">Acesso vitalício ao conteúdo</li>
                     </ul>
                     <div class="curso-price">R$ 899</div>
-                    <a href="/checkout" class="plan-cta plan-cta--featured" style="margin-top:1.5rem;">Quero me inscrever</a>
+                    <a href="/checkout" class="plan-cta plan-cta--featured" style="margin-top:1.5rem;" data-i18n="course1-cta">Quero me inscrever</a>
                 </div>
 
                 <!-- Presencial - Em Breve -->
                 <div class="curso-card curso-card--soon scroll-reveal">
-                    <div class="curso-badge curso-badge--soon">Em Breve</div>
+                    <div class="curso-badge curso-badge--soon" data-i18n="course2-badge">Em Breve</div>
                     <div class="curso-icon" style="color:var(--color-text-muted);">◈</div>
-                    <h3 class="curso-title" style="color:var(--color-text-muted);">Formação Presencial</h3>
-                    <p class="curso-desc">A versão presencial do Método Vital Flow está chegando. Prática supervisionada ao vivo, em João Pessoa, com certificação completa.</p>
+                    <h3 class="curso-title" style="color:var(--color-text-muted);" data-i18n="course2-title">Formação Presencial</h3>
+                    <p class="curso-desc" data-i18n="course2-desc">A versão presencial do Método Vital Flow está chegando. Prática supervisionada ao vivo, em João Pessoa, com certificação completa.</p>
                     <ul class="curso-includes" style="opacity:0.4;">
-                        <li>Prática supervisionada</li>
-                        <li>João Pessoa, PB</li>
-                        <li>Turmas reduzidas</li>
-                        <li>Certificado reconhecido</li>
+                        <li data-i18n="course2-f1">Prática supervisionada</li>
+                        <li data-i18n="course2-f2">João Pessoa, PB</li>
+                        <li data-i18n="course2-f3">Turmas reduzidas</li>
+                        <li data-i18n="course2-f4">Certificado reconhecido</li>
                     </ul>
-                    <div class="curso-price" style="color:var(--color-text-muted);">Em breve</div>
-                    <a href="#contato" class="plan-cta" style="margin-top:1.5rem; opacity:0.4; pointer-events:none; border-color:rgba(197,160,89,0.15); color:rgba(197,160,89,0.3);">Disponível em breve</a>
+                    <div class="curso-price" style="color:var(--color-text-muted);" data-i18n="course2-price">Em breve</div>
+                    <a href="#contato" class="plan-cta" style="margin-top:1.5rem; opacity:0.4; pointer-events:none; border-color:rgba(197,160,89,0.15); color:rgba(197,160,89,0.3);" data-i18n="course2-cta">Disponível em breve</a>
                 </div>
 
                 </div>
@@ -304,17 +321,17 @@
                 <img src="images/Franco-2 edit.jpg" alt="Franco Veron — Terapeuta Holístico">
             </div>
             <div class="cta-content">
-                <h2>Pronto para Começar?</h2>
+                <h2 data-i18n="cta-title">Pronto para Começar?</h2>
                 <div class="divider"></div>
-                <p>Atendimento domiciliar com agenda limitada para garantir total dedicação a cada cliente. Sem fila de espera — só compromisso real.</p>
+                <p data-i18n="cta-desc">Atendimento domiciliar com agenda limitada para garantir total dedicação a cada cliente. Sem fila de espera — só compromisso real.</p>
                 <div class="contact-info">
-                    <p><strong>Área de atendimento:</strong> João Pessoa & Cabedelo - PB</p>
-                    <p><strong>Agendamento:</strong> Exclusivamente por reserva prévia</p>
-                    <p><strong>WhatsApp:</strong> <a href="https://wa.me/5583987846147" target="_blank" style="color:var(--color-gold); text-decoration:none;">(83) 98784-6147</a></p>
-                    <p><strong>Email:</strong> <a href="mailto:francoveronterapiasholisticas@gmail.com" style="color:var(--color-gold); text-decoration:none;">francoveronterapiasholisticas@gmail.com</a></p>
-                    <p><strong>Instagram:</strong> <a href="https://www.instagram.com/francoveronterapias/" target="_blank" style="color:var(--color-gold); text-decoration:none;">@francoveronterapias</a></p>
+                    <p><strong data-i18n="contact-area-label">Área de atendimento:</strong> <span data-i18n="contact-area-val">João Pessoa & Cabedelo - PB</span></p>
+                    <p><strong data-i18n="contact-sched-label">Agendamento:</strong> <span data-i18n="contact-sched-val">Exclusivamente por reserva prévia</span></p>
+                    <p><strong data-i18n="contact-whats-label">WhatsApp:</strong> <a href="https://wa.me/5583987846147" target="_blank" style="color:var(--color-gold); text-decoration:none;">(83) 98784-6147</a></p>
+                    <p><strong data-i18n="contact-email-label">Email:</strong> <a href="mailto:francoveronterapiasholisticas@gmail.com" style="color:var(--color-gold); text-decoration:none;">francoveronterapiasholisticas@gmail.com</a></p>
+                    <p><strong data-i18n="contact-ig-label">Instagram:</strong> <a href="https://www.instagram.com/francoveronterapias/" target="_blank" style="color:var(--color-gold); text-decoration:none;">@francoveronterapias</a></p>
                 </div>
-                <a href="#" onclick="abrirWhatsApp('Olá, gostaria de agendar uma sessão!'); return false;" class="btn-primary">Agendar via WhatsApp</a>
+                <a href="#" class="btn-primary" data-i18n="cta-btn" data-wa-key="wa-schedule">Agendar via WhatsApp</a>
             </div>
         </div>
     </section>
@@ -322,7 +339,7 @@
     <footer>
         <div class="container footer-content">
             <div class="footer-social">
-                <span class="footer-social-label">Acompanhe nossas novidades</span>
+                <span class="footer-social-label" data-i18n="footer-social-label">Acompanhe nossas novidades</span>
                 <div class="footer-social-icons">
                     <a href="https://www.instagram.com/francoveronterapias/" target="_blank" aria-label="Instagram">
                         <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
@@ -336,7 +353,7 @@
                 </div>
             </div>
             <div class="payment-methods">
-                <span class="payment-label">Formas de Pagamento</span>
+                <span class="payment-label" data-i18n="payment-label">Formas de Pagamento</span>
                 <div class="payment-logos">
                     <!-- Visa -->
                     <div class="pay-logo">
@@ -361,7 +378,7 @@
                     </div>
                 </div>
             </div>
-            <p class="footer-copy">&copy; <span id="footer-year">2025</span> Franco Veron Massoterapeuta. Todos os direitos reservados.</p>
+            <p class="footer-copy">&copy; <span id="footer-year">2025</span> <span data-i18n="footer-copy-text">Franco Veron Massoterapeuta. Todos os direitos reservados.</span></p>
         </div>
     </footer>
 
@@ -374,7 +391,7 @@
         <svg id="iconPlay" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M9 18V5l12 6.5L9 18z"/><path d="M9 18V5l12 6.5L9 18z" opacity="0"/><path d="M9 18V5l12 6.5L9 18z"/></svg>
         <svg id="iconNote" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
         <svg id="iconPause" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-        <span id="musicLabel">Música</span>
+        <span id="musicLabel" data-i18n="music-play">Música</span>
     </button>
 
     <style>
@@ -414,6 +431,49 @@
         }
     </style>
 
+    <!-- ===== LANGUAGE SWITCHER STYLES ===== -->
+    <style>
+        .lang-switcher {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            margin-left: 14px;
+        }
+        .lang-switcher--mob {
+            margin: 1rem auto 0;
+            justify-content: center;
+            gap: 6px;
+        }
+        .lang-btn {
+            background: none;
+            border: none;
+            color: rgba(197,160,89,0.4);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.6rem;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            padding: 3px 5px;
+            border-radius: 3px;
+            transition: color 0.2s, background 0.2s;
+            text-transform: uppercase;
+        }
+        .lang-btn:hover { color: var(--color-gold); }
+        .lang-btn.active {
+            color: var(--color-gold);
+            font-weight: 700;
+            background: rgba(197,160,89,0.08);
+        }
+        .lang-sep {
+            color: rgba(197,160,89,0.2);
+            font-size: 0.55rem;
+            user-select: none;
+        }
+        @media (max-width: 900px) {
+            .lang-switcher:not(.lang-switcher--mob) { display: none; }
+        }
+    </style>
+
     <script type="module" src="body-map.js"></script>
     <script src="script.js"></script>
     <script>
@@ -443,6 +503,179 @@
     <script>
         // Dynamic footer year
         document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+        // ===== I18N SYSTEM =====
+        const TRANSLATIONS = {
+            pt: {
+                'nav-sobre':'Sobre','nav-procedimentos':'Procedimentos','nav-cursos':'Cursos','nav-contato':'Contacto','nav-cta':'Reservar Sessão',
+                'hero-desc':'Mais do que uma sessão de massagem, ofereço uma experiência terapêutica personalizada, com presença, técnica e atenção genuína — no conforto da sua casa.',
+                'hero-cta':'Agendar pelo WhatsApp','hero-ghost':'Conhecer mais',
+                'about-label':'A Cerca De',
+                'about-p1':'Franco Verón é terapeuta holístico e criou uma metodologia própria que combina o melhor das técnicas orientais e ocidentais para proporcionar relaxamento profundo, equilíbrio corporal e bem-estar emocional.',
+                'about-p2':'Com mais de 1000 atendimentos anuais, passou a desenvolver sessões adaptadas às necessidades individuais de cada paciente, integrando percepção, domínio técnico e cuidado em cada detalhe.',
+                'about-p3':'Atualmente, em João Pessoa, auxilia pessoas que enfrentam sobrecarga mental, dificuldade para dormir, rigidez muscular e desgastes provocados por rotinas intensas ou esforço físico constante.',
+                'about-p4':'Seu <em>Vital Flow Method</em> proporciona uma vivência terapêutica diferenciada, voltada à recuperação do corpo, melhora da mobilidade e renovação da energia.',
+                'bodymap-label':'Explore','bodymap-title':'Mapa Muscular',
+                'bodymap-subtitle':'Gire o corpo com o mouse ou o dedo · Passe sobre um músculo para iluminá-lo · Clique para ver as dicas em vídeo',
+                'services-title':'Procedimentos & Planos',
+                'plan1-label':'Plano Mensal','plan1-period':'/mês · 4 sessões','plan1-detail':'80 min · Domiciliar · Transporte incluído',
+                'plan1-f1':'Massagem Relaxante','plan1-f2':'Massagem Esportiva','plan1-f3':'Drenagem Linfática','plan1-f4':'Reflexologia Podal','plan1-f5':'Aromaterapia','plan1-f6':'Massagem Ayurvédica','plan1-f7':'Shiatsu',
+                'plan-cta':'Reservar',
+                'plan2-label':'Pacote 10 Sessões','plan2-period':'· 10 sessões','plan2-detail':'80 min · Domiciliar · Transporte incluído',
+                'plan2-f1':'Tudo do Vital Experience, mais:','plan2-f2':'Ventosa Terapia','plan2-f3':'Pedras Quentes','plan2-f4':'Alongamentos & Mobilidade','plan2-f5':'Agenda fixa garantida','plan2-f6':'WhatsApp direto',
+                'plan3-badge':'Recomendado','plan3-label':'Plano Anual','plan3-period':'/ano · 48 sessões','plan3-detail':'80 min · Domiciliar · Transporte incluído',
+                'plan3-f1':'Tudo do Vital Autocuidado, mais:','plan3-f2':'✦ Spa Day Exclusivo','plan3-f3':'Preço congelado 12 meses','plan3-f4':'Prioridade máxima',
+                'plans-footnote':'Atendimento domiciliar personalizado · Transporte incluído · João Pessoa & Cabedelo',
+                'gift-tag':'✦ Sessão Avulsa','gift-desc':'Ofereça uma experiência completa. O Gift Card dá acesso a qualquer procedimento do nosso catálogo — incluindo todos os serviços do plano Vital Elite — em uma única sessão inesquecível.',
+                'gift-price-label':'sessão única · todos os procedimentos','gift-cta':'Adquirir Gift Card',
+                'courses-title':'Cursos','courses-subtitle':'Aprenda com quem pratica. Formações online com técnica real e aplicação imediata.',
+                'course1-badge':'Online','course1-title':'Método Vital Flow',
+                'course1-desc':'Aprenda a aplicar uma sequência terapêutica completa que integra técnicas de massagem, manejo do toque e leitura corporal — para aliviar tensões, restaurar o fluxo e gerar bem-estar real em quem você atende.',
+                'course1-f1':'Teoria completa em vídeo','course1-f2':'Módulos práticos demonstrados','course1-f3':'Exame final','course1-f4':'Certificado de conclusão','course1-f5':'Acesso vitalício ao conteúdo',
+                'course1-cta':'Quero me inscrever',
+                'course2-badge':'Em Breve','course2-title':'Formação Presencial',
+                'course2-desc':'A versão presencial do Método Vital Flow está chegando. Prática supervisionada ao vivo, em João Pessoa, com certificação completa.',
+                'course2-f1':'Prática supervisionada','course2-f2':'João Pessoa, PB','course2-f3':'Turmas reduzidas','course2-f4':'Certificado reconhecido',
+                'course2-price':'Em breve','course2-cta':'Disponível em breve',
+                'cta-title':'Pronto para Começar?',
+                'cta-desc':'Atendimento domiciliar com agenda limitada para garantir total dedicação a cada cliente. Sem fila de espera — só compromisso real.',
+                'contact-area-label':'Área de atendimento:','contact-area-val':'João Pessoa & Cabedelo - PB',
+                'contact-sched-label':'Agendamento:','contact-sched-val':'Exclusivamente por reserva prévia',
+                'contact-whats-label':'WhatsApp:','contact-email-label':'Email:','contact-ig-label':'Instagram:',
+                'cta-btn':'Agendar via WhatsApp',
+                'footer-social-label':'Acompanhe nossas novidades','payment-label':'Formas de Pagamento',
+                'footer-copy-text':'Franco Veron Massoterapeuta. Todos os direitos reservados.',
+                'music-play':'Música','music-pause':'Pausar',
+                'wa-reserve':'Olá, gostaria de reservar uma sessão!','wa-schedule':'Olá, gostaria de agendar uma sessão!',
+            },
+            en: {
+                'nav-sobre':'About','nav-procedimentos':'Treatments','nav-cursos':'Courses','nav-contato':'Contact','nav-cta':'Book Session',
+                'hero-desc':'More than a massage session, I offer a personalized therapeutic experience, with presence, technique and genuine attention — in the comfort of your home.',
+                'hero-cta':'Book via WhatsApp','hero-ghost':'Learn more',
+                'about-label':'About',
+                'about-p1':'Franco Verón is a holistic therapist who created his own methodology combining the best of Eastern and Western techniques to provide deep relaxation, body balance and emotional well-being.',
+                'about-p2':'With over 1,000 annual sessions, he has developed tailored treatments to the individual needs of each patient, integrating perception, technical mastery and genuine care in every detail.',
+                'about-p3':'Currently based in João Pessoa, he helps people facing mental overload, sleep difficulties, muscle stiffness and fatigue caused by intense routines or constant physical effort.',
+                'about-p4':'His <em>Vital Flow Method</em> provides a distinctive therapeutic experience focused on body recovery, improved mobility and energy renewal.',
+                'bodymap-label':'Explore','bodymap-title':'Muscle Map',
+                'bodymap-subtitle':'Rotate the body with mouse or finger · Hover over a muscle to highlight it · Click to watch video tips',
+                'services-title':'Treatments & Plans',
+                'plan1-label':'Monthly Plan','plan1-period':'/month · 4 sessions','plan1-detail':'80 min · Home visit · Transport included',
+                'plan1-f1':'Relaxing Massage','plan1-f2':'Sports Massage','plan1-f3':'Lymphatic Drainage','plan1-f4':'Reflexology','plan1-f5':'Aromatherapy','plan1-f6':'Ayurvedic Massage','plan1-f7':'Shiatsu',
+                'plan-cta':'Book Now',
+                'plan2-label':'10-Session Package','plan2-period':'· 10 sessions','plan2-detail':'80 min · Home visit · Transport included',
+                'plan2-f1':'Everything in Vital Experience, plus:','plan2-f2':'Cupping Therapy','plan2-f3':'Hot Stones','plan2-f4':'Stretching & Mobility','plan2-f5':'Fixed schedule guaranteed','plan2-f6':'Direct WhatsApp access',
+                'plan3-badge':'Recommended','plan3-label':'Annual Plan','plan3-period':'/year · 48 sessions','plan3-detail':'80 min · Home visit · Transport included',
+                'plan3-f1':'Everything in Vital Autocuidado, plus:','plan3-f2':'✦ Exclusive Spa Day','plan3-f3':'Price locked for 12 months','plan3-f4':'Top priority scheduling',
+                'plans-footnote':'Personalized home visits · Transport included · João Pessoa & Cabedelo',
+                'gift-tag':'✦ Single Session','gift-desc':'Give an unforgettable experience. The Gift Card grants access to any treatment in our catalog — including all Vital Elite plan services — in one complete session.',
+                'gift-price-label':'single session · all treatments','gift-cta':'Get Gift Card',
+                'courses-title':'Courses','courses-subtitle':'Learn from a practitioner. Online training with real technique and immediate application.',
+                'course1-badge':'Online','course1-title':'Vital Flow Method',
+                'course1-desc':'Learn to apply a complete therapeutic sequence integrating massage techniques, touch management and body reading — to relieve tension, restore flow and generate real well-being in those you treat.',
+                'course1-f1':'Complete theory in video','course1-f2':'Demonstrated practical modules','course1-f3':'Final exam','course1-f4':'Completion certificate','course1-f5':'Lifetime access to content',
+                'course1-cta':'Enroll now',
+                'course2-badge':'Coming Soon','course2-title':'In-Person Training',
+                'course2-desc':'The in-person version of the Vital Flow Method is coming. Live supervised practice in João Pessoa with full certification.',
+                'course2-f1':'Supervised practice','course2-f2':'João Pessoa, PB','course2-f3':'Small groups','course2-f4':'Recognized certificate',
+                'course2-price':'Coming soon','course2-cta':'Available soon',
+                'cta-title':'Ready to Start?',
+                'cta-desc':'Home visits with a limited schedule to ensure full dedication to each client. No waiting list — just real commitment.',
+                'contact-area-label':'Service area:','contact-area-val':'João Pessoa & Cabedelo - PB',
+                'contact-sched-label':'Booking:','contact-sched-val':'By prior reservation only',
+                'contact-whats-label':'WhatsApp:','contact-email-label':'Email:','contact-ig-label':'Instagram:',
+                'cta-btn':'Book via WhatsApp',
+                'footer-social-label':'Follow our updates','payment-label':'Payment Methods',
+                'footer-copy-text':'Franco Veron Massoterapeuta. All rights reserved.',
+                'music-play':'Music','music-pause':'Pause',
+                'wa-reserve':'Hello, I would like to book a session!','wa-schedule':'Hello, I would like to schedule a session!',
+            },
+            es: {
+                'nav-sobre':'Acerca de','nav-procedimentos':'Procedimientos','nav-cursos':'Cursos','nav-contato':'Contacto','nav-cta':'Reservar Sesión',
+                'hero-desc':'Más que una sesión de masaje, ofrezco una experiencia terapéutica personalizada, con presencia, técnica y atención genuina — en la comodidad de tu hogar.',
+                'hero-cta':'Agendar por WhatsApp','hero-ghost':'Conocer más',
+                'about-label':'Acerca de',
+                'about-p1':'Franco Verón es terapeuta holístico y creó una metodología propia que combina lo mejor de las técnicas orientales y occidentales para proporcionar relajación profunda, equilibrio corporal y bienestar emocional.',
+                'about-p2':'Con más de 1.000 atenciones anuales, desarrolló sesiones adaptadas a las necesidades individuales de cada paciente, integrando percepción, dominio técnico y cuidado en cada detalle.',
+                'about-p3':'Actualmente, en João Pessoa, ayuda a personas que enfrentan sobrecarga mental, dificultad para dormir, rigidez muscular y desgaste provocado por rutinas intensas o esfuerzo físico constante.',
+                'about-p4':'Su <em>Vital Flow Method</em> proporciona una vivencia terapéutica diferenciada, orientada a la recuperación del cuerpo, mejora de la movilidad y renovación de la energía.',
+                'bodymap-label':'Explorar','bodymap-title':'Mapa Muscular',
+                'bodymap-subtitle':'Gira el cuerpo con el mouse o el dedo · Pasa sobre un músculo para iluminarlo · Haz clic para ver los consejos en video',
+                'services-title':'Procedimientos & Planes',
+                'plan1-label':'Plan Mensual','plan1-period':'/mes · 4 sesiones','plan1-detail':'80 min · Domiciliario · Transporte incluido',
+                'plan1-f1':'Masaje Relajante','plan1-f2':'Masaje Deportivo','plan1-f3':'Drenaje Linfático','plan1-f4':'Reflexología Podal','plan1-f5':'Aromaterapia','plan1-f6':'Masaje Ayurvédico','plan1-f7':'Shiatsu',
+                'plan-cta':'Reservar',
+                'plan2-label':'Paquete 10 Sesiones','plan2-period':'· 10 sesiones','plan2-detail':'80 min · Domiciliario · Transporte incluido',
+                'plan2-f1':'Todo de Vital Experience, más:','plan2-f2':'Ventosa Terapéutica','plan2-f3':'Piedras Calientes','plan2-f4':'Estiramientos & Movilidad','plan2-f5':'Agenda fija garantizada','plan2-f6':'WhatsApp directo',
+                'plan3-badge':'Recomendado','plan3-label':'Plan Anual','plan3-period':'/año · 48 sesiones','plan3-detail':'80 min · Domiciliario · Transporte incluido',
+                'plan3-f1':'Todo de Vital Autocuidado, más:','plan3-f2':'✦ Spa Day Exclusivo','plan3-f3':'Precio congelado 12 meses','plan3-f4':'Prioridad máxima',
+                'plans-footnote':'Atención domiciliaria personalizada · Transporte incluido · João Pessoa & Cabedelo',
+                'gift-tag':'✦ Sesión Individual','gift-desc':'Regala una experiencia completa. El Gift Card da acceso a cualquier procedimiento de nuestro catálogo — incluyendo todos los servicios del plan Vital Elite — en una única sesión inolvidable.',
+                'gift-price-label':'sesión única · todos los procedimientos','gift-cta':'Adquirir Gift Card',
+                'courses-title':'Cursos','courses-subtitle':'Aprende de quien practica. Formaciones online con técnica real y aplicación inmediata.',
+                'course1-badge':'Online','course1-title':'Método Vital Flow',
+                'course1-desc':'Aprende a aplicar una secuencia terapéutica completa que integra técnicas de masaje, manejo del tacto y lectura corporal — para aliviar tensiones, restaurar el flujo y generar bienestar real en quien atiendes.',
+                'course1-f1':'Teoría completa en video','course1-f2':'Módulos prácticos demostrados','course1-f3':'Examen final','course1-f4':'Certificado de finalización','course1-f5':'Acceso de por vida al contenido',
+                'course1-cta':'Quiero inscribirme',
+                'course2-badge':'Próximamente','course2-title':'Formación Presencial',
+                'course2-desc':'La versión presencial del Método Vital Flow está llegando. Práctica supervisada en vivo, en João Pessoa, con certificación completa.',
+                'course2-f1':'Práctica supervisada','course2-f2':'João Pessoa, PB','course2-f3':'Grupos reducidos','course2-f4':'Certificado reconocido',
+                'course2-price':'Próximamente','course2-cta':'Disponible próximamente',
+                'cta-title':'¿Listo para Comenzar?',
+                'cta-desc':'Atención domiciliaria con agenda limitada para garantizar total dedicación a cada cliente. Sin lista de espera — solo compromiso real.',
+                'contact-area-label':'Área de atención:','contact-area-val':'João Pessoa & Cabedelo - PB',
+                'contact-sched-label':'Agendamiento:','contact-sched-val':'Exclusivamente con reserva previa',
+                'contact-whats-label':'WhatsApp:','contact-email-label':'Email:','contact-ig-label':'Instagram:',
+                'cta-btn':'Agendar por WhatsApp',
+                'footer-social-label':'Sigue nuestras novedades','payment-label':'Formas de Pago',
+                'footer-copy-text':'Franco Veron Massoterapeuta. Todos los derechos reservados.',
+                'music-play':'Música','music-pause':'Pausar',
+                'wa-reserve':'¡Hola, me gustaría reservar una sesión!','wa-schedule':'¡Hola, me gustaría agendar una sesión!',
+            }
+        };
+
+        let currentLang = localStorage.getItem('fv-lang') || 'pt';
+
+        function applyLang(lang) {
+            const T = TRANSLATIONS[lang] || TRANSLATIONS['pt'];
+            // Text nodes
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.dataset.i18n;
+                if (T[key] !== undefined) el.textContent = T[key];
+            });
+            // HTML nodes (allow tags like <em>)
+            document.querySelectorAll('[data-i18n-html]').forEach(el => {
+                const key = el.dataset.i18nHtml;
+                if (T[key] !== undefined) el.innerHTML = T[key];
+            });
+            // WhatsApp onclick buttons
+            document.querySelectorAll('[data-wa-key]').forEach(el => {
+                const msg = T[el.dataset.waKey] || '';
+                el.onclick = function() { abrirWhatsApp(msg); return false; };
+            });
+            // Music button: keep current state (isPlaying may not exist yet on first load)
+            const lbl = document.getElementById('musicLabel');
+            if (lbl) {
+                const playing = typeof isPlaying !== 'undefined' ? isPlaying : false;
+                lbl.textContent = playing ? (T['music-pause'] || 'Pausar') : (T['music-play'] || 'Música');
+            }
+            // Active buttons
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+            // html lang attribute
+            document.documentElement.lang = lang === 'pt' ? 'pt-BR' : lang;
+            currentLang = lang;
+            localStorage.setItem('fv-lang', lang);
+        }
+
+        // Wire all lang buttons (navbar + mobile)
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', () => applyLang(btn.dataset.lang));
+        });
+
+        // Apply saved language on load
+        applyLang(currentLang);
 
         // Hamburger toggle
         const hamburger = document.getElementById('hamburger');
@@ -499,7 +732,8 @@
             iconPlay.style.display = state ? 'none' : 'block';
             iconNote.style.display = state ? 'block' : 'none';
             iconPause.style.display = 'none';
-            musicLabel.textContent = state ? 'Pausar' : 'Música';
+            const T = TRANSLATIONS[currentLang] || TRANSLATIONS['pt'];
+            musicLabel.textContent = state ? (T['music-pause'] || 'Pausar') : (T['music-play'] || 'Música');
         }
 
         function tryPlay() {

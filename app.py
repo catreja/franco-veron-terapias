@@ -12,7 +12,7 @@ app = Flask(__name__, static_folder='.', static_url_path='')
 CALENDLY_TOKEN   = os.environ.get("CALENDLY_TOKEN", "")
 MP_ACCESS_TOKEN  = os.environ.get("MP_ACCESS_TOKEN",  "APP_USR-541007577080389-040515-d0596c847609f2584efc414854df5622-3313855818")
 MP_PUBLIC_KEY    = os.environ.get("MP_PUBLIC_KEY",    "APP_USR-d004f765-abfc-465f-a641-55336eb87947")
-CALLMEBOT_PHONE  = os.environ.get("CALLMEBOT_PHONE",  "558387846147")
+CALLMEBOT_PHONE  = os.environ.get("CALLMEBOT_PHONE",  "5583987846147")
 CALLMEBOT_APIKEY = os.environ.get("CALLMEBOT_APIKEY", "1417081")
 BASE_URL         = os.environ.get("BASE_URL",         "https://www.francoveronterapias.com.br")
 DOWNLOAD_LINK    = os.environ.get("DOWNLOAD_LINK",    "https://drive.google.com/SEU_LINK_DO_CURSO")
@@ -167,7 +167,8 @@ def webhook():
 @app.route('/sucesso')
 def sucesso():
     pay_id = request.args.get('payment_id', '')
-    with open('success.html', 'r', encoding='utf-8') as f:
+    _here = os.path.dirname(os.path.abspath(__file__))
+    with open(os.path.join(_here, 'success.html'), 'r', encoding='utf-8') as f:
         html = f.read()
     html = html.replace('{{DOWNLOAD_LINK}}', DOWNLOAD_LINK)
     html = html.replace('{{PAYMENT_ID}}', pay_id)
