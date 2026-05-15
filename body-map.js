@@ -154,23 +154,44 @@ const FRAG = /* glsl */`
   }
 `;
 
-// Uniforms compartilhados entre todos os meshes
-const sharedUniforms = {
-  uTime:    { value: 0 },
-  uBase:    { value: new THREE.Color(0x001e55) },
-  uRim:     { value: new THREE.Color(0x0066cc) },
-  uEnergy:  { value: new THREE.Color(0x00aadd) },
-  uOpacity: { value: 0.38 },   // mais opaco = mais definição
-};
+// Uniform de tempo compartilhado (animação sincronizada)
+const uTime = { value: 0 };
 
+// Cores normais e destacadas
+const C_BASE   = new THREE.Color(0x001e55);
+const C_RIM    = new THREE.Color(0x0066cc);
+const C_ENERGY = new THREE.Color(0x00aadd);
+const C_BASE_H = new THREE.Color(0x003a66);   // highlight base
+const C_RIM_H  = new THREE.Color(0x00ffff);   // highlight rim
+const C_ENERGY_H = new THREE.Color(0x00ffff); // highlight energy
+
+// Cada mesh tem seus próprios uniforms de cor
 function makeHoloMat() {
   return new THREE.ShaderMaterial({
     vertexShader:   VERT,
     fragmentShader: FRAG,
-    uniforms:       sharedUniforms,
-    transparent:    true,
-    depthWrite:     false,
-    side:           THREE.FrontSide,
+    uniforms: {
+      uTime:    uTime,
+      uBase:    { value: C_BASE.clone() },
+      uRim:     { value: C_RIM.clone() },
+      uEnergy:  { value: C_ENERGY.clone() },
+      uOpacity: { value: 0.38 },
+    },
+    transparent: true,
+    depthWrite:  false,
+    side:        THREE.FrontSide,
+  });
+}
+
+// Mapa: muscleId → lista de materiais desse grupo
+const muscleMats = {};
+
+function applyHighlight(id, on) {
+  (muscleMats[id] || []).forEach(mat => {
+    mat.uniforms.uBase.value.copy(on ? C_BASE_H   : C_BASE);
+    mat.uniforms.uRim.value.copy( on ? C_RIM_H    : C_RIM);
+    mat.uniforms.uEnergy.value.copy(on ? C_ENERGY_H : C_ENERGY);
+    mat.uniforms.uOpacity.value = on ? 0.88 : 0.38;
   });
 }
 
@@ -245,88 +266,92 @@ tryLoad(0);
 function buildProcedural() {
   const ell = (rx,ry,rz) => { const g=new THREE.SphereGeometry(1,28,20); g.scale(rx,ry,rz); return g; };
   const cyl = (rt,rb,h,s=20) => new THREE.CylinderGeometry(rt,rb,h,s);
-  const add = (geo,x,y,z,rx=0,ry=0,rz=0) => {
+  const add = (geo,x,y,z,rx=0,ry=0,rz=0,mid=null) => {
     const m4=new THREE.Matrix4().compose(new THREE.Vector3(x,y,z),new THREE.Quaternion().setFromEuler(new THREE.Euler(rx,ry,rz)),new THREE.Vector3(1,1,1));
     geo.applyMatrix4(m4);
-    const mesh=new THREE.Mesh(geo,makeHoloMat());
+    const mat=makeHoloMat();
+    const mesh=new THREE.Mesh(geo,mat);
     mesh.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo,18),edgeMat.clone()));
     bodyGroup.add(mesh);
+    if(mid){ if(!muscleMats[mid]) muscleMats[mid]=[]; muscleMats[mid].push(mat); }
   };
   // CABEÇA
   add(ell(0.148,0.185,0.152), 0, 1.810, 0);
-  // PESCOÇO GROSSO de atleta
-  add(cyl(0.095,0.115,0.215,16), 0, 1.652, 0);
-  // TRAPÉZIO — muito largo, sobe até o pescoço
-  add(ell(0.400,0.100,0.220), 0, 1.545,-0.030);
-  // PEITO SUPERIOR largo
-  add(cyl(0.320,0.315,0.165,24), 0, 1.518, 0);
-  // PEITORAIS — muito grandes e salientes (fisiculturista)
-  add(ell(0.240,0.158,0.210),-0.158,1.412,0.172);
-  add(ell(0.240,0.158,0.210), 0.158,1.412,0.172);
-  // TRONCO largo em V
+  // PESCOÇO
+  add(cyl(0.095,0.115,0.215,16), 0, 1.652, 0, 0,0,0, 'cervical');
+  // TRAPÉZIO
+  add(ell(0.400,0.100,0.220), 0, 1.545,-0.030, 0,0,0, 'trapezio');
+  // PEITO SUPERIOR
+  add(cyl(0.320,0.315,0.165,24), 0, 1.518, 0, 0,0,0, 'peitoral');
+  // PEITORAIS
+  add(ell(0.240,0.158,0.210),-0.158,1.412,0.172, 0,0,0, 'peitoral');
+  add(ell(0.240,0.158,0.210), 0.158,1.412,0.172, 0,0,0, 'peitoral');
+  // TRONCO
   add(cyl(0.308,0.298,0.255,24), 0, 1.382, 0);
   add(cyl(0.285,0.258,0.245,24), 0, 1.138, 0);
-  add(cyl(0.242,0.220,0.228,24), 0, 0.938, 0);  // cintura
-  add(cyl(0.252,0.272,0.245,24), 0, 0.732, 0);  // pelve
-  // ABDÔMEN — 6 blocos bem definidos
+  add(cyl(0.242,0.220,0.228,24), 0, 0.938, 0);
+  add(cyl(0.252,0.272,0.245,24), 0, 0.732, 0);
+  // ABDÔMEN — 6 blocos
   [-1,1].forEach(s=>{
-    add(ell(0.088,0.062,0.078),s*0.068,1.225,0.210);
-    add(ell(0.088,0.062,0.078),s*0.068,1.090,0.208);
-    add(ell(0.082,0.058,0.072),s*0.068,0.958,0.202);
+    add(ell(0.088,0.062,0.078),s*0.068,1.225,0.210, 0,0,0,'abdomen');
+    add(ell(0.088,0.062,0.078),s*0.068,1.090,0.208, 0,0,0,'abdomen');
+    add(ell(0.082,0.058,0.072),s*0.068,0.958,0.202, 0,0,0,'abdomen');
   });
-  // SERRÁTIL / OBLÍQUOS largos
-  add(ell(0.092,0.188,0.100),-0.278,1.235,0.062);
-  add(ell(0.092,0.188,0.100), 0.278,1.235,0.062);
-  // DORSAIS — muito alargados (costas em V)
-  add(ell(0.210,0.268,0.125),-0.345,1.235,-0.078);
-  add(ell(0.210,0.268,0.125), 0.345,1.235,-0.078);
-  // GLÚTEOS — grandes e redondos
-  add(ell(0.195,0.162,0.150),-0.145,0.702,-0.138);
-  add(ell(0.195,0.162,0.150), 0.145,0.702,-0.138);
-  // DELTÓIDES — muito grandes, esféricos
-  add(ell(0.195,0.182,0.182),-0.368,1.555, 0);
-  add(ell(0.195,0.182,0.182), 0.368,1.555, 0);
-  // BRAÇO SUPERIOR grosso
-  add(cyl(0.115,0.095,0.462,16),-0.448,1.232,0, 0,0, 0.26);
-  add(cyl(0.115,0.095,0.462,16), 0.448,1.232,0, 0,0,-0.26);
-  // BÍCEPS — muito salientes (pico alto)
-  add(ell(0.128,0.115,0.128),-0.492,1.305,0.132, 0,0, 0.26);
-  add(ell(0.128,0.115,0.128), 0.492,1.305,0.132, 0,0,-0.26);
-  // TRÍCEPS — grande atrás
-  add(ell(0.115,0.138,0.108),-0.482,1.208,-0.128, 0,0, 0.24);
-  add(ell(0.115,0.138,0.108), 0.482,1.208,-0.128, 0,0,-0.24);
-  // ANTEBRAÇO grosso
-  add(cyl(0.095,0.065,0.442,14),-0.528,0.850,0, 0,0, 0.15);
-  add(cyl(0.095,0.065,0.442,14), 0.528,0.850,0, 0,0,-0.15);
+  // OBLÍQUOS
+  add(ell(0.092,0.188,0.100),-0.278,1.235,0.062, 0,0,0,'abdomen');
+  add(ell(0.092,0.188,0.100), 0.278,1.235,0.062, 0,0,0,'abdomen');
+  // DORSAIS
+  add(ell(0.210,0.268,0.125),-0.345,1.235,-0.078, 0,0,0,'dorsais');
+  add(ell(0.210,0.268,0.125), 0.345,1.235,-0.078, 0,0,0,'dorsais');
+  // GLÚTEOS
+  add(ell(0.195,0.162,0.150),-0.145,0.702,-0.138, 0,0,0,'gluteos');
+  add(ell(0.195,0.162,0.150), 0.145,0.702,-0.138, 0,0,0,'gluteos');
+  // DELTÓIDES
+  add(ell(0.195,0.182,0.182),-0.368,1.555,0, 0,0,0,'deltoides');
+  add(ell(0.195,0.182,0.182), 0.368,1.555,0, 0,0,0,'deltoides');
+  // BRAÇO SUPERIOR
+  add(cyl(0.115,0.095,0.462,16),-0.448,1.232,0, 0,0, 0.26,'biceps');
+  add(cyl(0.115,0.095,0.462,16), 0.448,1.232,0, 0,0,-0.26,'biceps');
+  // BÍCEPS
+  add(ell(0.128,0.115,0.128),-0.492,1.305,0.132, 0,0, 0.26,'biceps');
+  add(ell(0.128,0.115,0.128), 0.492,1.305,0.132, 0,0,-0.26,'biceps');
+  // TRÍCEPS
+  add(ell(0.115,0.138,0.108),-0.482,1.208,-0.128, 0,0, 0.24,'triceps');
+  add(ell(0.115,0.138,0.108), 0.482,1.208,-0.128, 0,0,-0.24,'triceps');
+  // ANTEBRAÇO
+  add(cyl(0.095,0.065,0.442,14),-0.528,0.850,0, 0,0, 0.15,'tibial');
+  add(cyl(0.095,0.065,0.442,14), 0.528,0.850,0, 0,0,-0.15,'tibial');
   // MÃOS
   add(ell(0.068,0.058,0.050),-0.588,0.628,0);
   add(ell(0.068,0.058,0.050), 0.588,0.628,0);
-  // COXA — muito grossa (atleta)
-  add(cyl(0.175,0.150,0.595,22),-0.162,0.568,0);
-  add(cyl(0.175,0.150,0.595,22), 0.162,0.568,0);
-  // QUADRÍCEPS — 4 cabeças bem visíveis
-  add(ell(0.158,0.228,0.138),-0.162,0.575,0.142);
-  add(ell(0.158,0.228,0.138), 0.162,0.575,0.142);
-  add(ell(0.108,0.182,0.085),-0.238,0.552,0.112);
-  add(ell(0.108,0.182,0.085), 0.238,0.552,0.112);
-  // ISQUIOTIBIAIS grossos
-  add(ell(0.138,0.205,0.118),-0.162,0.558,-0.138);
-  add(ell(0.138,0.205,0.118), 0.162,0.558,-0.138);
+  // COXA
+  add(cyl(0.175,0.150,0.595,22),-0.162,0.568,0, 0,0,0,'quadriceps');
+  add(cyl(0.175,0.150,0.595,22), 0.162,0.568,0, 0,0,0,'quadriceps');
+  // QUADRÍCEPS
+  add(ell(0.158,0.228,0.138),-0.162,0.575,0.142, 0,0,0,'quadriceps');
+  add(ell(0.158,0.228,0.138), 0.162,0.575,0.142, 0,0,0,'quadriceps');
+  add(ell(0.108,0.182,0.085),-0.238,0.552,0.112, 0,0,0,'quadriceps');
+  add(ell(0.108,0.182,0.085), 0.238,0.552,0.112, 0,0,0,'quadriceps');
+  // ISQUIOTIBIAIS
+  add(ell(0.138,0.205,0.118),-0.162,0.558,-0.138, 0,0,0,'isquiotib');
+  add(ell(0.138,0.205,0.118), 0.162,0.558,-0.138, 0,0,0,'isquiotib');
   // JOELHOS
   add(ell(0.128,0.112,0.122),-0.162,0.268,0.048);
   add(ell(0.128,0.112,0.122), 0.162,0.268,0.048);
   // PERNA INFERIOR
-  add(cyl(0.122,0.082,0.525,18),-0.162,0.002,0);
-  add(cyl(0.122,0.082,0.525,18), 0.162,0.002,0);
-  // PANTURRILHA — grande e definida
-  add(ell(0.125,0.195,0.118),-0.162,0.132,-0.115);
-  add(ell(0.125,0.195,0.118), 0.162,0.132,-0.115);
+  add(cyl(0.122,0.082,0.525,18),-0.162,0.002,0, 0,0,0,'tibial');
+  add(cyl(0.122,0.082,0.525,18), 0.162,0.002,0, 0,0,0,'tibial');
+  // PANTURRILHA
+  add(ell(0.125,0.195,0.118),-0.162,0.132,-0.115, 0,0,0,'panturrilha');
+  add(ell(0.125,0.195,0.118), 0.162,0.132,-0.115, 0,0,0,'panturrilha');
   // TORNOZELOS
   add(ell(0.080,0.068,0.080),-0.162,-0.282,0);
   add(ell(0.080,0.068,0.080), 0.162,-0.282,0);
   // PÉS
   add(ell(0.072,0.040,0.152),-0.162,-0.322,0.082);
   add(ell(0.072,0.040,0.152), 0.162,-0.322,0.082);
+  // LOMBAR (costas baixas)
+  add(ell(0.155,0.080,0.110), 0, 0.880,-0.175, 0,0,0,'lombar');
 }
 
 // ================================================================
@@ -402,9 +427,19 @@ let hovered=null;
 
 const setHovered=m=>{
   if(m===hovered) return;
-  if(hovered){hovered.glowMat.map=glowGold;hovered.glow.scale.setScalar(.14);hovered.dotMat.color.set(0xc5a059);}
+  if(hovered){
+    hovered.glowMat.map=glowGold;
+    hovered.glow.scale.setScalar(.14);
+    hovered.dotMat.color.set(0xc5a059);
+    applyHighlight(hovered.id, false);  // apaga o músculo anterior
+  }
   hovered=m;
-  if(m){m.glowMat.map=glowBlue;m.glow.scale.setScalar(.42);m.dotMat.color.set(0x00eeff);}
+  if(m){
+    m.glowMat.map=glowBlue;
+    m.glow.scale.setScalar(.42);
+    m.dotMat.color.set(0x00eeff);
+    applyHighlight(m.id, true);         // ilumina TODO o músculo
+  }
 };
 const castRay=(nx,ny)=>{mouse.set(nx,ny);raycaster.setFromCamera(mouse,camera);return raycaster.intersectObjects(hotspotMeshes);};
 const showTip=(m,cx,cy)=>{
@@ -451,10 +486,10 @@ function animate(){
   const t=clock.getElapsedTime();
 
   // Atualiza shader time
-  sharedUniforms.uTime.value=t;
+  uTime.value=t;
 
   // Opacidade do shader pulsa suavemente
-  sharedUniforms.uOpacity.value=0.36+0.04*Math.sin(t*0.9);
+  // opacidade global removida (cada mesh tem a sua)
 
   // Intensidade do bloom pulsa
   bloom.strength=0.75+0.12*Math.sin(t*0.7);
