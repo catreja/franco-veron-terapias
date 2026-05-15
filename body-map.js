@@ -145,10 +145,10 @@ function applyHolo(model) {
 // CARREGA MODELO — tenta 3 URLs em sequência
 // ================================================================
 const loader = new GLTFLoader();
+// jsDelivr tem CORS (Access-Control-Allow-Origin: *) — confirmado
 const MODEL_URLS = [
   '/models/body.glb',
-  'https://raw.githubusercontent.com/mrdoob/three.js/r160/examples/models/gltf/Soldier.glb',
-  'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/main/Models/CesiumMan/glTF-Binary/CesiumMan.glb',
+  'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r160/examples/models/gltf/Soldier.glb',
 ];
 
 function tryLoad(idx) {

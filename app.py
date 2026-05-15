@@ -21,10 +21,11 @@ DOWNLOAD_LINK    = os.environ.get("DOWNLOAD_LINK",    "https://drive.google.com/
 
 sdk = mercadopago.SDK(MP_ACCESS_TOKEN)
 
-# --- Modelos 3D ---
+# --- Modelos 3D (caminho absoluto para garantir no Railway) ---
+MODELS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'models')
 @app.route('/models/<path:filename>')
 def models(filename):
-    return send_from_directory('models', filename)
+    return send_from_directory(MODELS_DIR, filename)
 
 # --- Páginas estáticas ---
 @app.route('/')
