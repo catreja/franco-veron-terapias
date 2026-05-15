@@ -210,8 +210,14 @@ scene.add(particles);
 // CARREGA MODELO GLB
 // ================================================================
 const loader = new GLTFLoader();
-loader.load(
-  'models/body.glb',
+// Tenta local primeiro, cai pro CDN se falhar
+function loadModel(urls, onLoad, onProgress, onError) {
+  const [url, ...rest] = urls;
+  loader.load(url, onLoad, onProgress, rest.length ? () => loadModel(rest, onLoad, onProgress, onError) : onError);
+}
+
+loadModel(
+  ['models/body.glb', 'https://threejs.org/examples/models/gltf/Soldier.glb'],
   (gltf) => {
     const model = gltf.scene;
 
