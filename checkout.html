@@ -261,7 +261,15 @@
                 <div class="si-icon"><i class="fas fa-check"></i></div>
                 <h3>Pagamento <span>Aprovado!</span></h3>
                 <p id="successMsg"></p>
-                <a href="#" class="btn-acesso" id="btnAcesso" target="_blank"></a>
+                <a href="#" class="btn-acesso" id="btnAcesso" target="_blank" style="display:none"></a>
+            </div>
+
+            <!-- Calendly inline (aparece após pagamento para planos/gift) -->
+            <div id="calendlyBox" style="display:none; margin-top: 2rem;">
+                <p style="text-align:center; font-family:var(--font-heading); font-size:1.1rem; color:var(--color-gold); margin-bottom:1rem;">
+                    ✦ Agende sua sessão agora
+                </p>
+                <div id="calendly-inline" style="min-width:100%; height:700px; border-radius:12px; overflow:hidden;"></div>
             </div>
 
             <div class="co-methods">
@@ -279,6 +287,10 @@
 
     </div>
 </div>
+
+<!-- Calendly widget -->
+<link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+<script src="https://assets.calendly.com/assets/external/widget.js" async></script>
 
 <!-- SDK Mercado Pago -->
 <script src="https://sdk.mercadopago.com/js/v2"></script>
@@ -573,6 +585,7 @@ async function verificarPagamento(paymentId) {
 function mostrarSucesso(paymentId) {
     document.getElementById('paymentBrick_container').style.display = 'none';
     document.getElementById('dadosComprador').style.display = 'none';
+    document.getElementById('secaoPagamento').style.display = 'none';
     document.getElementById('pixBox').classList.remove('show');
     document.getElementById('coError').classList.remove('show');
 
@@ -580,14 +593,41 @@ function mostrarSucesso(paymentId) {
     const info = PRODUTO_DISPLAY[pid] || PRODUTO_DISPLAY['curso'];
 
     document.getElementById('successMsg').innerHTML = info.successMsg;
+
     const btn = document.getElementById('btnAcesso');
     btn.innerHTML = info.btnHtml;
     btn.href      = info.btnHref(paymentId);
 
     const s = document.getElementById('successInline');
     s.classList.add('show');
-    s.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    s.scrollIntoView({ behavior: 'smooth', block: 'start' });
     lançarConfetti();
+
+    // Calendly: aparece para planos e gift card (não para curso)
+    if (pid !== 'curso') {
+        const box = document.getElementById('calendlyBox');
+        box.style.display = 'block';
+
+        // Aguarda o script do Calendly carregar se necessário
+        const tentarCalendly = () => {
+            if (window.Calendly) {
+                Calendly.initInlineWidget({
+                    url: 'https://calendly.com/francoveronterapiasholisticas',
+                    parentElement: document.getElementById('calendly-inline'),
+                    prefill: {
+                        name:  dadosComprador.nome  || '',
+                        email: dadosComprador.email || '',
+                    },
+                });
+            } else {
+                setTimeout(tentarCalendly, 500);
+            }
+        };
+        setTimeout(tentarCalendly, 300);
+    } else {
+        // Curso: mostra botão de acesso
+        btn.style.display = 'inline-flex';
+    }
 }
 
 function lançarConfetti() {
