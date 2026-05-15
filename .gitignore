@@ -1,5 +1,4 @@
 
-# Videos grandes (acima de 100MB)
-*.mp4
-*.mov
-*.avi
+# Videos originais grandes (acima de 50MB)
+images/hero-video.mp4
+images/hero-video-compressed.mp4
