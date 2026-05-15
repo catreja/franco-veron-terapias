@@ -48,11 +48,11 @@ const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableZoom    = false;
 controls.enablePan     = false;
 controls.target.set(0, 0.3, 0);
-controls.minPolarAngle = Math.PI * 0.15;
-controls.maxPolarAngle = Math.PI * 0.85;
 controls.rotateSpeed   = 0.75;
-controls.dampingFactor = 0.08;
+controls.dampingFactor = 0.10;
 controls.enableDamping = true;
+controls.autoRotate      = true;
+controls.autoRotateSpeed = 1.8;
 controls.update();
 
 // ================================================================
@@ -354,11 +354,12 @@ document.getElementById('ytModal').addEventListener('click', e => {
 });
 
 // ================================================================
-// AUTO-ROTAÇÃO
+// AUTO-ROTAÇÃO — para quando o usuário interage, retoma depois
 // ================================================================
-let autoRotate = true;
-controls.addEventListener('start', () => { autoRotate = false; });
-controls.addEventListener('end',   () => { setTimeout(() => autoRotate = true, 3000); });
+controls.addEventListener('start', () => { controls.autoRotate = false; });
+controls.addEventListener('end',   () => {
+    setTimeout(() => { controls.autoRotate = true; }, 3000);
+});
 
 // ================================================================
 // LOOP DE ANIMAÇÃO
@@ -368,8 +369,6 @@ const clock = new THREE.Clock();
 function animate() {
   requestAnimationFrame(animate);
   const t = clock.getElapsedTime();
-
-  if (autoRotate) bodyGroup.rotation.y += 0.0035;
 
   // Pulso dos hotspots
   MUSCLES.forEach((m, i) => {
