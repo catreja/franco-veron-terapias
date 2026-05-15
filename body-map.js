@@ -45,7 +45,7 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000510);
 
 const camera = new THREE.PerspectiveCamera(44, cW() / cH(), 0.1, 50);
-camera.position.set(0, 0.9, 3.8);
+camera.position.set(0, 0.9, 4.8);
 
 // ================================================================
 // BLOOM (UnrealBloomPass — efeito cinematográfico)
@@ -207,7 +207,7 @@ function applyHolo(model) {
   const box = new THREE.Box3().setFromObject(model);
   const sz  = box.getSize(new THREE.Vector3());
   const ct  = box.getCenter(new THREE.Vector3());
-  const scl = 1.82 / sz.y;
+  const scl = 1.55 / sz.y;
   model.scale.setScalar(scl);
   model.position.set(-ct.x * scl, -box.min.y * scl, -ct.z * scl);
 
@@ -232,6 +232,7 @@ function applyHolo(model) {
 const loader = new GLTFLoader();
 const MODEL_URLS = [
   '/models/body.glb',
+  'https://cdn.jsdelivr.net/gh/BoQsc/Godot-3D-Male-Base-Mesh@main/Original/male_base_mesh.glb',
   'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r160/examples/models/gltf/Soldier.glb',
 ];
 
