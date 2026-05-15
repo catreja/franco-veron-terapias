@@ -202,21 +202,16 @@
 <div class="checkout-page">
     <div class="checkout-grid">
 
-        <!-- RESUMO -->
+        <!-- RESUMO (preenchido dinamicamente) -->
         <div class="co-summary">
-            <span class="co-badge"><i class="fas fa-play-circle"></i> Curso Online</span>
-            <h1 class="co-title">Método<br><em>Vital Flow</em></h1>
-            <p class="co-desc">Aprenda a aplicar uma sequência terapêutica completa que integra técnicas de massagem, manejo do toque e leitura corporal.</p>
-            <ul class="co-features">
-                <li><i class="fas fa-check"></i> Teoria completa em vídeo</li>
-                <li><i class="fas fa-check"></i> Módulos práticos demonstrados</li>
-                <li><i class="fas fa-check"></i> Exame final + Certificado</li>
-                <li><i class="fas fa-check"></i> Acesso vitalício ao conteúdo</li>
-            </ul>
+            <span class="co-badge" id="coBadge"></span>
+            <h1 class="co-title" id="coTitle"></h1>
+            <p class="co-desc" id="coDesc"></p>
+            <ul class="co-features" id="coFeatures"></ul>
             <div class="co-price-block">
-                <p class="co-price-lbl">Investimento único</p>
-                <div class="co-price-val"><sup>R$</sup> 899</div>
-                <p class="co-price-note">Acesso imediato após confirmação do pagamento</p>
+                <p class="co-price-lbl" id="coPriceLbl"></p>
+                <div class="co-price-val" id="coPriceVal"></div>
+                <p class="co-price-note" id="coPriceNote"></p>
             </div>
         </div>
 
@@ -265,10 +260,8 @@
             <div class="success-inline" id="successInline">
                 <div class="si-icon"><i class="fas fa-check"></i></div>
                 <h3>Pagamento <span>Aprovado!</span></h3>
-                <p>Seu acesso ao Método Vital Flow foi liberado. Clique abaixo para começar agora.</p>
-                <a href="#" class="btn-acesso" id="btnAcesso" target="_blank">
-                    <i class="fas fa-play-circle"></i> Acessar o Curso
-                </a>
+                <p id="successMsg"></p>
+                <a href="#" class="btn-acesso" id="btnAcesso" target="_blank"></a>
             </div>
 
             <div class="co-methods">
@@ -292,9 +285,94 @@
 <script>
 let mp, bricksBuilder, dadosComprador = {}, brickCriado = false, mpConfig = {};
 
-// Carrega MP SDK ao abrir a página
+// ── Conteúdo por produto ──────────────────────────────────────────
+const PRODUTO_DISPLAY = {
+    'curso': {
+        badge:      '<i class="fas fa-play-circle"></i> Curso Online',
+        titulo:     'Método<br><em>Vital Flow</em>',
+        desc:       'Aprenda a aplicar uma sequência terapêutica completa que integra técnicas de massagem, manejo do toque e leitura corporal.',
+        features:   ['Teoria completa em vídeo','Módulos práticos demonstrados','Exame final + Certificado','Acesso vitalício ao conteúdo'],
+        priceLbl:   'Investimento único',
+        priceNote:  'Acesso imediato após confirmação do pagamento',
+        successMsg: 'Seu acesso ao <strong>Método Vital Flow</strong> foi liberado. Clique abaixo para começar agora.',
+        btnHtml:    '<i class="fas fa-play-circle"></i> Acessar o Curso',
+        btnHref:    (payId) => `/sucesso?payment_id=${payId}`,
+    },
+    'vital-experience': {
+        badge:      '<i class="fas fa-calendar-alt"></i> Plano Mensal',
+        titulo:     'Vital<br><em>Experience</em>',
+        desc:       '4 sessões mensais de 80 min com atendimento domiciliar em João Pessoa e Cabedelo. Transporte incluído.',
+        features:   ['4 sessões por mês (80 min cada)','Massagem Relaxante, Esportiva e Shiatsu','Atendimento domiciliar','Transporte incluído'],
+        priceLbl:   'Por mês',
+        priceNote:  '4 sessões mensais · 80 min cada · Domiciliar',
+        successMsg: 'Seu <strong>Plano Vital Experience</strong> foi confirmado! Em breve entraremos em contato pelo WhatsApp para agendar suas sessões.',
+        btnHtml:    '<i class="fab fa-whatsapp"></i> Falar pelo WhatsApp',
+        btnHref:    () => 'https://wa.me/558387846147?text=Ol%C3%A1%2C+acabei+de+adquirir+o+Plano+Vital+Experience!',
+    },
+    'vital-autocuidado': {
+        badge:      '<i class="fas fa-layer-group"></i> Pacote 10 Sessões',
+        titulo:     'Vital<br><em>Autocuidado</em>',
+        desc:       'Pacote com 10 sessões de 80 min. Atendimento domiciliar em João Pessoa e Cabedelo. Transporte incluído.',
+        features:   ['10 sessões (80 min cada)','Tudo do Vital Experience','Ventosa Terapia','Reflexologia Podal','WhatsApp direto'],
+        priceLbl:   'Pacote completo',
+        priceNote:  '10 sessões · 80 min cada · Domiciliar',
+        successMsg: 'Seu <strong>Pacote Vital Autocuidado</strong> foi confirmado! Em breve entraremos em contato pelo WhatsApp para agendar suas sessões.',
+        btnHtml:    '<i class="fab fa-whatsapp"></i> Falar pelo WhatsApp',
+        btnHref:    () => 'https://wa.me/558387846147?text=Ol%C3%A1%2C+acabei+de+adquirir+o+Vital+Autocuidado!',
+    },
+    'vital-elite': {
+        badge:      '<i class="fas fa-crown"></i> Plano Anual · Recomendado',
+        titulo:     'Vital<br><em>Elite</em>',
+        desc:       '48 sessões anuais de 80 min. O plano completo com prioridade máxima, Spa Day exclusivo e preço congelado por 12 meses.',
+        features:   ['48 sessões/ano (80 min cada)','Tudo do Vital Autocuidado','✦ Spa Day Exclusivo','Preço congelado 12 meses','Prioridade máxima de agendamento'],
+        priceLbl:   'Plano anual',
+        priceNote:  '48 sessões · 80 min cada · Domiciliar · Preço fixo',
+        successMsg: 'Seu <strong>Plano Vital Elite</strong> foi confirmado! Em breve entraremos em contato pelo WhatsApp com todos os detalhes.',
+        btnHtml:    '<i class="fab fa-whatsapp"></i> Falar pelo WhatsApp',
+        btnHref:    () => 'https://wa.me/558387846147?text=Ol%C3%A1%2C+acabei+de+adquirir+o+Plano+Vital+Elite!',
+    },
+    'gift-card': {
+        badge:      '<i class="fas fa-gift"></i> Sessão Avulsa',
+        titulo:     'Gift<br><em>Card</em>',
+        desc:       'Ofereça uma experiência inesquecível. O Gift Card dá acesso a qualquer procedimento do catálogo em uma única sessão completa.',
+        features:   ['1 sessão de 80 min','Todos os procedimentos disponíveis','Atendimento domiciliar','Transporte incluído','Válido por 6 meses'],
+        priceLbl:   'Sessão única',
+        priceNote:  'Voucher enviado por e-mail após confirmação',
+        successMsg: 'Seu <strong>Gift Card</strong> foi confirmado! O voucher será enviado para o e-mail informado em até 1 hora.',
+        btnHtml:    '<i class="fab fa-whatsapp"></i> Falar pelo WhatsApp',
+        btnHref:    () => 'https://wa.me/558387846147?text=Ol%C3%A1%2C+acabei+de+adquirir+um+Gift+Card!',
+    },
+};
+
+// ── Carrega produto e inicializa MP ──────────────────────────────
 (async function init() {
-    mpConfig = await fetch('/api/config').then(r => r.json());
+    const pid    = new URLSearchParams(location.search).get('produto') || 'curso';
+    mpConfig     = await fetch(`/api/config?produto=${pid}`).then(r => r.json());
+    const info   = PRODUTO_DISPLAY[pid] || PRODUTO_DISPLAY['curso'];
+
+    // Preenche resumo lateral
+    document.getElementById('coBadge').innerHTML    = info.badge;
+    document.getElementById('coTitle').innerHTML    = info.titulo;
+    document.getElementById('coDesc').textContent   = info.desc;
+    document.getElementById('coPriceLbl').textContent = info.priceLbl;
+    document.getElementById('coPriceNote').textContent = info.priceNote;
+
+    const preco = mpConfig.preco || 0;
+    const [reais, cents] = preco.toFixed(2).split('.');
+    document.getElementById('coPriceVal').innerHTML =
+        `<sup>R$</sup> ${Number(reais).toLocaleString('pt-BR')}` +
+        (cents !== '00' ? `<small style="font-size:1.2rem">,${cents}</small>` : '');
+
+    const ul = document.getElementById('coFeatures');
+    info.features.forEach(f => {
+        const li = document.createElement('li');
+        li.innerHTML = `<i class="fas fa-check"></i> ${f}`;
+        ul.appendChild(li);
+    });
+
+    // Atualiza título da aba
+    document.title = `${mpConfig.nome} | Franco Veron`;
+
     mp = new MercadoPago(mpConfig.public_key, { locale: 'pt-BR' });
     bricksBuilder = mp.bricks();
 })();
@@ -409,10 +487,12 @@ async function criarBrick() {
                 }, 1000);
             },
             onSubmit: async ({ selectedPaymentMethod, formData }) => {
+                const pid = new URLSearchParams(location.search).get('produto') || 'curso';
                 const payload = {
                     ...formData,
-                    nome:  dadosComprador.nome,
-                    email: dadosComprador.email,
+                    nome:       dadosComprador.nome,
+                    email:      dadosComprador.email,
+                    produto_id: pid,
                 };
 
                 try {
@@ -495,9 +575,17 @@ function mostrarSucesso(paymentId) {
     document.getElementById('dadosComprador').style.display = 'none';
     document.getElementById('pixBox').classList.remove('show');
     document.getElementById('coError').classList.remove('show');
+
+    const pid  = new URLSearchParams(location.search).get('produto') || 'curso';
+    const info = PRODUTO_DISPLAY[pid] || PRODUTO_DISPLAY['curso'];
+
+    document.getElementById('successMsg').innerHTML = info.successMsg;
+    const btn = document.getElementById('btnAcesso');
+    btn.innerHTML = info.btnHtml;
+    btn.href      = info.btnHref(paymentId);
+
     const s = document.getElementById('successInline');
     s.classList.add('show');
-    document.getElementById('btnAcesso').href = `/sucesso?payment_id=${paymentId}`;
     s.scrollIntoView({ behavior: 'smooth', block: 'center' });
     lançarConfetti();
 }

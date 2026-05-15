@@ -13,10 +13,37 @@ MP_ACCESS_TOKEN  = os.environ.get("MP_ACCESS_TOKEN",  "APP_USR-541007577080389-0
 MP_PUBLIC_KEY    = os.environ.get("MP_PUBLIC_KEY",    "APP_USR-d004f765-abfc-465f-a641-55336eb87947")
 CALLMEBOT_PHONE  = os.environ.get("CALLMEBOT_PHONE",  "558387846147")
 CALLMEBOT_APIKEY = os.environ.get("CALLMEBOT_APIKEY", "1417081")
-BASE_URL         = os.environ.get("BASE_URL",         "https://francoveronterapias.com.br")
-CURSO_NOME       = "Método Vital Flow"
-CURSO_PRECO      = 899.00
+BASE_URL         = os.environ.get("BASE_URL",         "https://www.francoveronterapias.com.br")
 DOWNLOAD_LINK    = os.environ.get("DOWNLOAD_LINK",    "https://drive.google.com/SEU_LINK_DO_CURSO")
+
+# ── Catálogo de produtos ──────────────────────────────────────────
+PRODUTOS = {
+    'curso': {
+        'nome':  'Método Vital Flow',
+        'preco': 899.00,
+        'tipo':  'curso',
+    },
+    'vital-experience': {
+        'nome':  'Plano Vital Experience',
+        'preco': 1200.00,
+        'tipo':  'plano',
+    },
+    'vital-autocuidado': {
+        'nome':  'Vital Autocuidado',
+        'preco': 2500.00,
+        'tipo':  'plano',
+    },
+    'vital-elite': {
+        'nome':  'Vital Elite',
+        'preco': 10999.00,
+        'tipo':  'plano',
+    },
+    'gift-card': {
+        'nome':  'Gift Card — Sessão Avulsa',
+        'preco': 399.00,
+        'tipo':  'gift',
+    },
+}
 # =====================================================================
 
 sdk = mercadopago.SDK(MP_ACCESS_TOKEN)
@@ -36,22 +63,34 @@ def index():
 def checkout():
     return send_from_directory('.', 'checkout.html')
 
-# --- Retorna a public key pro frontend ---
+# --- Retorna config do produto pro frontend ---
 @app.route('/api/config')
 def config():
-    return jsonify({"public_key": MP_PUBLIC_KEY, "preco": CURSO_PRECO})
+    pid     = request.args.get('produto', 'curso')
+    produto = PRODUTOS.get(pid, PRODUTOS['curso'])
+    return jsonify({
+        "public_key": MP_PUBLIC_KEY,
+        "preco":      produto['preco'],
+        "nome":       produto['nome'],
+        "tipo":       produto['tipo'],
+        "produto_id": pid,
+    })
 
 # --- Processa pagamento (cartão, Pix, boleto) sem redirecionar ---
 @app.route('/api/processar-pagamento', methods=['POST'])
 def processar_pagamento():
-    data  = request.json or {}
-    nome  = data.get('nome', 'Cliente')
-    email = data.get('email', 'cliente@email.com')
+    data       = request.json or {}
+    nome       = data.get('nome', 'Cliente')
+    email      = data.get('email', 'cliente@email.com')
+    pid        = data.get('produto_id', 'curso')
+    produto    = PRODUTOS.get(pid, PRODUTOS['curso'])
+    preco      = produto['preco']
+    nome_prod  = produto['nome']
 
     # Dados base do pagamento
     payment_data = {
-        "transaction_amount": CURSO_PRECO,
-        "description": CURSO_NOME,
+        "transaction_amount": preco,
+        "description": nome_prod,
         "payment_method_id": data.get("payment_method_id"),
         "payer": {
             "email": email,
@@ -79,7 +118,7 @@ def processar_pagamento():
 
     # Pagamento aprovado (cartão)
     if status == "approved":
-        _notificar_whatsapp(nome, email, CURSO_PRECO, pay_id, "Cartão")
+        _notificar_whatsapp(nome, email, preco, pay_id, "Cartão", nome_prod)
         return jsonify({"status": "approved", "payment_id": pay_id})
 
     # Pix pendente — devolve QR code para exibir na página
@@ -114,11 +153,12 @@ def webhook():
         response = sdk.payment().get(pay_id)
         payment  = response.get("response", {})
         if payment.get("status") == "approved":
-            nome  = payment.get("payer", {}).get("first_name", "Cliente")
-            email = payment.get("payer", {}).get("email", "—")
-            valor = payment.get("transaction_amount", CURSO_PRECO)
+            nome   = payment.get("payer", {}).get("first_name", "Cliente")
+            email  = payment.get("payer", {}).get("email", "—")
+            valor  = payment.get("transaction_amount", 0)
             metodo = payment.get("payment_method_id", "—")
-            _notificar_whatsapp(nome, email, valor, pay_id, metodo)
+            desc   = payment.get("description", "—")
+            _notificar_whatsapp(nome, email, valor, pay_id, metodo, desc)
     return jsonify({"status": "ok"}), 200
 
 # --- Página de sucesso ---
@@ -132,10 +172,10 @@ def sucesso():
     return html
 
 # --- CallMeBot ---
-def _notificar_whatsapp(nome, email, valor, pay_id, metodo):
+def _notificar_whatsapp(nome, email, valor, pay_id, metodo, produto="—"):
     msg = (
         f"✅ *VENDA REALIZADA!*\n\n"
-        f"📚 Curso: {CURSO_NOME}\n"
+        f"🛒 Produto: {produto}\n"
         f"👤 Nome: {nome}\n"
         f"📧 Email: {email}\n"
         f"💳 Método: {metodo}\n"
