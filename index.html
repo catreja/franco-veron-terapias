@@ -7,12 +7,19 @@
     <title>Franco Veron Terapias | Massoterapeuta em João Pessoa</title>
     <meta name="description" content="Massoterapeuta em João Pessoa e Cabedelo. Franco Veron oferece sessões de massagem terapêutica domiciliar, com técnica, presença e tratamento 100% personalizado. Agende já.">
 
+    <!-- DNS prefetch para CDNs externos -->
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://flagcdn.com">
+    <link rel="dns-prefetch" href="https://assets.calendly.com">
+    <link rel="dns-prefetch" href="https://sdk.mercadopago.com">
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Montserrat:wght@200;300;400;500&display=swap"
-        rel="stylesheet">
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Montserrat:wght@300;400;500&display=swap"
+        rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet"></noscript>
 
     <link rel="stylesheet" href="style.css">
 
@@ -118,7 +125,7 @@
                 </div>
 
                 <div class="about-image scroll-reveal">
-                    <img src="images/FRANCO-1 edit.jpg" alt="Franco Veron — Terapeuta Holístico">
+                    <img src="images/FRANCO-1 edit.jpg" alt="Franco Veron — Terapeuta Holístico" loading="lazy" decoding="async">
                 </div>
             </div>
         </div>
@@ -259,7 +266,7 @@
 
             <!-- Esquerda: foto -->
             <div class="cursos-split-photo">
-                <img src="images/Franco-4 edit fondo.png" alt="Franco Veron — Terapeuta Holístico">
+                <img src="images/Franco-4 edit fondo.png" alt="Franco Veron — Terapeuta Holístico" loading="lazy" decoding="async">
             </div>
 
             <!-- Direita: título + cards -->
@@ -314,7 +321,7 @@
     <section class="cta section-padding" id="contato">
         <div class="container cta-container scroll-reveal">
             <div class="cta-image">
-                <img src="images/Franco-2 edit.jpg" alt="Franco Veron — Terapeuta Holístico">
+                <img src="images/Franco-2 edit.jpg" alt="Franco Veron — Terapeuta Holístico" loading="lazy" decoding="async">
             </div>
             <div class="cta-content">
                 <h2 data-i18n="cta-title">Pronto para Começar?</h2>
@@ -353,11 +360,11 @@
                 <div class="payment-logos">
                     <!-- Visa -->
                     <div class="pay-logo">
-                        <img src="images/visa.svg" alt="Visa" height="38">
+                        <img src="images/visa.svg" alt="Visa" height="38" loading="lazy">
                     </div>
                     <!-- Mastercard -->
                     <div class="pay-logo">
-                        <img src="images/mastercard.svg" alt="Mastercard" height="38">
+                        <img src="images/mastercard.svg" alt="Mastercard" height="38" loading="lazy">
                     </div>
                     <!-- Pix -->
                     <div class="pay-logo">
@@ -370,7 +377,7 @@
                     </div>
                     <!-- Mercado Pago -->
                     <div class="pay-logo">
-                        <img src="images/mercadopago-logo.png" alt="Mercado Pago" height="36">
+                        <img src="images/mercadopago-logo.png" alt="Mercado Pago" height="36" loading="lazy">
                     </div>
                 </div>
             </div>
@@ -379,7 +386,7 @@
     </footer>
 
     <!-- ===== MUSIC PLAYER ===== -->
-    <audio id="bgMusic" loop preload="auto">
+    <audio id="bgMusic" loop preload="none">
         <source src="Vital flow sound.mp3" type="audio/mpeg">
     </audio>
 
@@ -487,7 +494,7 @@
     </style>
 
     <script type="module" src="body-map.js"></script>
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
     <script>
         function abrirWhatsApp(mensagem) {
             var phone = '5583987846147';

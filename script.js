@@ -1,12 +1,14 @@
-// Navbar background change on scroll
+// Navbar background change on scroll — throttled via rAF
+const navbar = document.querySelector('.navbar');
+let rafPending = false;
 window.addEventListener('scroll', () => {
-    const navbar = document.querySelector('.navbar');
-    if (window.scrollY > 50) {
-        navbar.classList.add('scrolled');
-    } else {
-        navbar.classList.remove('scrolled');
-    }
-});
+    if (rafPending) return;
+    rafPending = true;
+    requestAnimationFrame(() => {
+        navbar.classList.toggle('scrolled', window.scrollY > 50);
+        rafPending = false;
+    });
+}, { passive: true });
 
 // Smooth scroll for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -29,8 +31,8 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // Intersection Observer for scroll reveal animations
 const observerOptions = {
     root: null,
-    rootMargin: '0px',
-    threshold: 0.15
+    rootMargin: '0px 0px -40px 0px',
+    threshold: 0.08
 };
 
 const observer = new IntersectionObserver((entries, observer) => {
