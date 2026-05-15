@@ -1,0 +1,5 @@
+
+# Videos grandes (acima de 100MB)
+*.mp4
+*.mov
+*.avi

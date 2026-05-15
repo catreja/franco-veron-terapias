@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Franco Veron Terapias | Terapeuta Holístico em João Pessoa</title>
+    <meta name="description" content="Atendimento terapêutico domiciliar em João Pessoa. Franco Veron, terapeuta holístico com experiência real, toque presente e tratamento 100% personalizado. Agende já.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Montserrat:wght@200;300;400;500&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-inner">
+
+            <!-- Left links -->
+            <ul class="nav-links nav-left">
+                <li><a href="#sobre" class="nav-link" data-section="sobre">Sobre</a></li>
+                <li><a href="#servicos" class="nav-link" data-section="servicos">Procedimentos</a></li>
+            </ul>
+
+            <!-- Center logo -->
+            <a href="#inicio" class="nav-logo">
+                <span class="logo-main">FRANCO VERON</span>
+                <span class="logo-sub">Massoterapeuta</span>
+            </a>
+
+            <!-- Right links + CTA -->
+            <ul class="nav-links nav-right">
+                <li><a href="#cursos" class="nav-link" data-section="cursos">Cursos</a></li>
+                <li><a href="#contato" class="nav-link" data-section="contato">Contacto</a></li>
+                <li><a href="#" onclick="abrirWhatsApp('Olá, gostaria de reservar uma sessão!'); return false;" class="nav-cta" id="nav-cta-btn">Reservar Sessão</a></li>
+            </ul>
+
+            <!-- Hamburger (mobile) -->
+            <button class="hamburger" id="hamburger" aria-label="Abrir menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+
+        <!-- Mobile Drawer -->
+        <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+            <a href="#sobre" class="mob-link" data-section="sobre">Sobre</a>
+            <a href="#servicos" class="mob-link" data-section="servicos">Procedimentos</a>
+            <a href="#cursos" class="mob-link" data-section="cursos">Cursos</a>
+            <a href="#contato" class="mob-link" data-section="contato">Contacto</a>
+            <a href="#" onclick="abrirWhatsApp('Olá, gostaria de reservar uma sessão!'); return false;" class="mob-cta">Reservar Sessão</a>
+        </div>
+    </nav>
+
+    <header class="hero" id="inicio">
+        <video class="hero-video" autoplay muted playsinline preload="auto" loop id="heroVideo">
+            <source src="images/hero-video-final.mp4" type="video/mp4">
+        </video>
+        <div class="hero-content fade-in">
+            <div class="hero-badge">✦ João Pessoa · Cabedelo, PB ✦</div>
+            <h1>Franco Veron</h1>
+            <p class="description">Mais do que uma sessão de massagem, ofereço uma experiência terapêutica personalizada, com presença, técnica e atenção genuína — no conforto da sua casa.</p>
+            <div class="hero-actions">
+                <a href="#" onclick="abrirWhatsApp('Olá, gostaria de agendar uma sessão!'); return false;" class="btn-primary" id="hero-cta">Agendar pelo WhatsApp</a>
+                <a href="#sobre" class="btn-ghost">Conhecer mais</a>
+            </div>
+        </div>
+        <div class="hero-scroll-indicator" aria-hidden="true">
+            <span class="scroll-line"></span>
+            <span class="scroll-label">Scroll</span>
+        </div>
+    </header>
+
+    <section class="about section-padding" id="sobre">
+        <div class="container">
+            <div class="section-title scroll-reveal" style="text-align:left; margin-bottom: 3rem;">
+                <span style="font-family:var(--font-body); font-size:0.65rem; letter-spacing:3px; text-transform:uppercase; color:var(--color-gold);">A Cerca De</span>
+                <h2 style="margin-top:0.5rem;">Franco Veron</h2>
+                <div class="divider"></div>
+            </div>
+
+            <div class="about-grid">
+                <div class="about-text scroll-reveal">
+                    <p>Franco Verón é terapeuta holístico e criou uma metodologia própria que combina o melhor das técnicas orientais e ocidentais para proporcionar relaxamento profundo, equilíbrio corporal e bem-estar emocional.</p>
+                    <p>Com mais de 1000 atendimentos anuais, passou a desenvolver sessões adaptadas às necessidades individuais de cada cliente, integrando percepção, domínio técnico e cuidado em cada detalhe.</p>
+                    <p>Atualmente, em João Pessoa, auxilia pessoas que enfrentam sobrecarga mental, dificuldade para dormir, rigidez muscular e desgastes provocados por rotinas intensas ou esforço físico constante.</p>
+                    <p>Seu <em>Vital Flow Method</em> proporciona uma vivência terapêutica diferenciada, voltada à recuperação do corpo, melhora da mobilidade e renovação da energia.</p>
+
+                </div>
+
+                <div class="about-image scroll-reveal">
+                    <img src="images/FRANCO-1 edit.jpg" alt="Franco Veron — Terapeuta Holístico">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="services section-padding" id="servicos">
+        <div class="container">
+            <div class="section-title scroll-reveal">
+                <h2>Procedimentos & Planos</h2>
+                <div class="divider center"></div>
+            </div>
+
+            <div class="plans-grid">
+
+                <!-- ESSENTIEL -->
+                <div class="plan-card scroll-reveal">
+                    <div class="plan-header">
+                        <span class="plan-label">Plano Mensal</span>
+                        <h3 class="plan-name">Vital Experience</h3>
+                        <div class="plan-price">
+                            <span class="plan-amount">R$ 1.200</span>
+                            <span class="plan-period">/mês · 4 sessões</span>
+                        </div>
+                        <p class="plan-detail">80 min · Domiciliar · Transporte incluído</p>
+                    </div>
+                    <ul class="plan-features">
+                        <li>Massagem Relaxante</li>
+                        <li>Massagem Esportiva</li>
+                        <li>Drenagem Linfática</li>
+                        <li>Reflexologia Podal</li>
+                        <li>Aromaterapia</li>
+                        <li>Massagem Ayurvédica</li>
+                        <li>Shiatsu</li>
+                    </ul>
+                    <a href="#" onclick="abrirWhatsApp('Olá, gostaria de reservar o plano Vital Experience!'); return false;" class="plan-cta">Reservar</a>
+                </div>
+
+                <!-- PRESTIGE -->
+                <div class="plan-card scroll-reveal">
+                    <div class="plan-header">
+                        <span class="plan-label">Pacote 10 Sessões</span>
+                        <h3 class="plan-name">Vital Autocuidado</h3>
+                        <div class="plan-price">
+                            <span class="plan-amount">R$ 2.500</span>
+                            <span class="plan-period">· 10 sessões</span>
+                        </div>
+                        <p class="plan-detail">80 min · Domiciliar · Transporte incluído</p>
+                    </div>
+                    <ul class="plan-features">
+                        <li>Tudo do Vital Experience, mais:</li>
+                        <li class="feature-extra">Ventosa Terapia</li>
+                        <li class="feature-extra">Pedras Quentes</li>
+                        <li class="feature-extra">Alongamentos & Mobilidade</li>
+                        <li class="feature-extra">Agenda fixa garantida</li>
+                        <li class="feature-extra">WhatsApp direto</li>
+                    </ul>
+                    <a href="#" onclick="abrirWhatsApp('Olá, gostaria de reservar o plano Vital Autocuidado!'); return false;" class="plan-cta">Reservar</a>
+                </div>
+
+                <!-- ÉLITE -->
+                <div class="plan-card plan-card--featured scroll-reveal">
+                    <div class="plan-badge">Recomendado</div>
+                    <div class="plan-header">
+                        <span class="plan-label">Plano Anual</span>
+                        <h3 class="plan-name">Vital Elite</h3>
+                        <div class="plan-price">
+                            <span class="plan-amount">R$ 10.999</span>
+                            <span class="plan-period">/ano · 48 sessões</span>
+                        </div>
+                        <p class="plan-detail">80 min · Domiciliar · Transporte incluído</p>
+                    </div>
+                    <ul class="plan-features">
+                        <li>Tudo do Vital Autocuidado, mais:</li>
+                        <li class="feature-extra">✦ Spa Day Exclusivo</li>
+                        <li class="feature-extra">Preço congelado 12 meses</li>
+                        <li class="feature-extra">Prioridade máxima</li>
+                    </ul>
+                    <a href="#" onclick="abrirWhatsApp('Olá, gostaria de reservar o plano Vital Elite!'); return false;" class="plan-cta plan-cta--featured">Reservar</a>
+                </div>
+
+            </div>
+
+            <p class="plans-footnote scroll-reveal">Atendimento domiciliar personalizado · Transporte incluído · João Pessoa & Cabedelo</p>
+
+            <!-- GIFT CARD -->
+            <div class="gift-card scroll-reveal">
+                <div class="gift-card-inner">
+                    <div class="gift-card-left">
+                        <span class="gift-tag">✦ Sessão Avulsa</span>
+                        <h3 class="gift-title">Gift Card</h3>
+                        <p class="gift-desc">Ofereça uma experiência completa. O Gift Card dá acesso a qualquer procedimento do nosso catálogo — incluindo todos os serviços do plano Thrive — em uma única sessão inesquecível.</p>
+                    </div>
+                    <div class="gift-card-right">
+                        <span class="gift-price">R$ 399</span>
+                        <span class="gift-price-label">sessão única · todos os procedimentos</span>
+                        <a href="#contato" class="plan-cta plan-cta--featured">Adquirir Gift Card</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="cursos" id="cursos">
+        <div class="cursos-split">
+
+            <!-- Esquerda: foto -->
+            <div class="cursos-split-photo">
+                <img src="images/Franco-4 edit fondo.png" alt="Franco Veron — Terapeuta Holístico">
+            </div>
+
+            <!-- Direita: título + cards -->
+            <div class="cursos-split-content">
+                <div class="section-title scroll-reveal" style="text-align:left;">
+                    <h2>Cursos</h2>
+                    <div class="divider"></div>
+                    <p>Aprenda com quem pratica. Formações online com técnica real e aplicação imediata.</p>
+                </div>
+
+                <div class="cursos-grid cursos-grid--two">
+
+                <!-- Método Vital Flow -->
+                <div class="curso-card curso-card--featured scroll-reveal">
+                    <div class="curso-badge">Online</div>
+                    <div class="curso-icon">◈</div>
+                    <h3 class="curso-title">Método Vital Flow</h3>
+                    <p class="curso-desc">Aprenda a aplicar uma sequência terapêutica completa que integra técnicas de massagem, manejo do toque e leitura corporal — para aliviar tensões, restaurar o fluxo e gerar bem-estar real em quem você atende.</p>
+                    <ul class="curso-includes">
+                        <li>Teoria completa em vídeo</li>
+                        <li>Módulos práticos demonstrados</li>
+                        <li>Exame final</li>
+                        <li>Certificado de conclusão</li>
+                        <li>Acesso vitalício ao conteúdo</li>
+                    </ul>
+                    <div class="curso-price">R$ 899</div>
+                    <a href="/checkout" class="plan-cta plan-cta--featured" style="margin-top:1.5rem;">Quero me inscrever</a>
+                </div>
+
+                <!-- Presencial - Em Breve -->
+                <div class="curso-card curso-card--soon scroll-reveal">
+                    <div class="curso-badge curso-badge--soon">Em Breve</div>
+                    <div class="curso-icon" style="color:var(--color-text-muted);">◈</div>
+                    <h3 class="curso-title" style="color:var(--color-text-muted);">Formação Presencial</h3>
+                    <p class="curso-desc">A versão presencial do Método Vital Flow está chegando. Prática supervisionada ao vivo, em João Pessoa, com certificação completa.</p>
+                    <ul class="curso-includes" style="opacity:0.4;">
+                        <li>Prática supervisionada</li>
+                        <li>João Pessoa, PB</li>
+                        <li>Turmas reduzidas</li>
+                        <li>Certificado reconhecido</li>
+                    </ul>
+                    <div class="curso-price" style="color:var(--color-text-muted);">Em breve</div>
+                    <a href="#contato" class="plan-cta" style="margin-top:1.5rem; opacity:0.4; pointer-events:none; border-color:rgba(197,160,89,0.15); color:rgba(197,160,89,0.3);">Disponível em breve</a>
+                </div>
+
+                </div>
+            </div><!-- fim cursos-split-content -->
+
+        </div><!-- fim cursos-split -->
+    </section>
+
+    <section class="cta section-padding" id="contato">
+        <div class="container cta-container scroll-reveal">
+            <div class="cta-image">
+                <img src="images/Franco-2 edit.jpg" alt="Franco Veron — Terapeuta Holístico">
+            </div>
+            <div class="cta-content">
+                <h2>Pronto para Começar?</h2>
+                <div class="divider"></div>
+                <p>Atendimento domiciliar com agenda limitada para garantir total dedicação a cada cliente. Sem fila de espera — só compromisso real.</p>
+                <div class="contact-info">
+                    <p><strong>Área de atendimento:</strong> João Pessoa & Cabedelo - PB</p>
+                    <p><strong>Agendamento:</strong> Exclusivamente por reserva prévia</p>
+                    <p><strong>WhatsApp:</strong> <a href="https://wa.me/5583987846147" target="_blank" style="color:var(--color-gold); text-decoration:none;">(83) 98784-6147</a></p>
+                    <p><strong>Email:</strong> <a href="mailto:francoveronterapiasholisticas@gmail.com" style="color:var(--color-gold); text-decoration:none;">francoveronterapiasholisticas@gmail.com</a></p>
+                    <p><strong>Instagram:</strong> <a href="https://www.instagram.com/francoveronterapias/" target="_blank" style="color:var(--color-gold); text-decoration:none;">@francoveronterapias</a></p>
+                </div>
+                <a href="#" onclick="abrirWhatsApp('Olá, gostaria de agendar uma sessão!'); return false;" class="btn-primary">Agendar via WhatsApp</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-social">
+                <span class="footer-social-label">Acompanhe nossas novidades</span>
+                <div class="footer-social-icons">
+                    <a href="https://www.instagram.com/francoveronterapias/" target="_blank" aria-label="Instagram">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    </a>
+                    <a href="https://www.tiktok.com/@francoveronterapias" target="_blank" aria-label="TikTok">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+                    </a>
+                    <a href="https://www.youtube.com/@francoveronterapias" target="_blank" aria-label="YouTube">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                    </a>
+                </div>
+            </div>
+            <div class="payment-methods">
+                <span class="payment-label">Formas de Pagamento</span>
+                <div class="payment-logos">
+                    <!-- Visa -->
+                    <div class="pay-logo">
+                        <img src="images/visa.svg" alt="Visa" height="38">
+                    </div>
+                    <!-- Mastercard -->
+                    <div class="pay-logo">
+                        <img src="images/mastercard.svg" alt="Mastercard" height="38">
+                    </div>
+                    <!-- Pix -->
+                    <div class="pay-logo">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 36" width="90" height="36">
+                            <g transform="translate(2, 6) scale(1.04)">
+                                <path fill="#32BCAD" d="M5.283 18.36a3.505 3.505 0 0 0 2.493-1.032l3.6-3.6a.684.684 0 0 1 .946 0l3.613 3.613a3.504 3.504 0 0 0 2.493 1.032h.71l-4.56 4.56a3.647 3.647 0 0 1-5.156 0L4.85 18.36ZM18.428 5.627a3.505 3.505 0 0 0-2.493 1.032l-3.613 3.614a.67.67 0 0 1-.946 0l-3.6-3.6A3.505 3.505 0 0 0 5.283 5.64h-.434l4.573-4.572a3.646 3.646 0 0 1 5.156 0l4.559 4.559ZM1.068 9.422 3.79 6.699h1.492a2.483 2.483 0 0 1 1.744.722l3.6 3.6a1.73 1.73 0 0 0 2.443 0l3.614-3.613a2.482 2.482 0 0 1 1.744-.723h1.767l2.737 2.737a3.646 3.646 0 0 1 0 5.156l-2.736 2.736h-1.768a2.482 2.482 0 0 1-1.744-.722l-3.613-3.613a1.77 1.77 0 0 0-2.444 0l-3.6 3.6a2.483 2.483 0 0 1-1.744.722H3.791l-2.723-2.723a3.646 3.646 0 0 1 0-5.156"/>
+                            </g>
+                            <text x="32" y="24" font-family="Arial" font-weight="700" font-size="18" fill="#32BCAD" letter-spacing="1">Pix</text>
+                        </svg>
+                    </div>
+                    <!-- Mercado Pago -->
+                    <div class="pay-logo">
+                        <img src="images/mercadopago-logo.png" alt="Mercado Pago" height="36">
+                    </div>
+                </div>
+            </div>
+            <p class="footer-copy">&copy; <span id="footer-year">2025</span> Franco Veron Massoterapeuta. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        function abrirWhatsApp(mensagem) {
+            var phone = '5583987846147';
+            var texto = encodeURIComponent(mensagem);
+            var appUrl = 'whatsapp://send?phone=' + phone + '&text=' + texto;
+            var webUrl = 'https://wa.me/' + phone + '?text=' + texto;
+
+            // Detecta se o app abriu (a janela perde foco quando o app abre)
+            var appAbriu = false;
+            function onBlur() { appAbriu = true; }
+            window.addEventListener('blur', onBlur, { once: true });
+
+            // Tenta abrir o app
+            window.location.href = appUrl;
+
+            // Se após 1.5s o app não abriu, abre o wa.me como fallback
+            setTimeout(function() {
+                window.removeEventListener('blur', onBlur);
+                if (!appAbriu) {
+                    window.open(webUrl, '_blank');
+                }
+            }, 1500);
+        }
+    </script>
+    <script>
+        // Dynamic footer year
+        document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+        // Hamburger toggle
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        hamburger.addEventListener('click', () => {
+            const open = hamburger.classList.toggle('open');
+            mobileMenu.classList.toggle('open', open);
+            hamburger.setAttribute('aria-expanded', open);
+            mobileMenu.setAttribute('aria-hidden', !open);
+        });
+
+        // Close mobile menu on link click
+        document.querySelectorAll('.mob-link, .mob-cta').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('open');
+                mobileMenu.classList.remove('open');
+                hamburger.setAttribute('aria-expanded', false);
+                mobileMenu.setAttribute('aria-hidden', true);
+            });
+        });
+
+        // Active nav link on scroll
+        const sections = document.querySelectorAll('section[id], header[id]');
+        const navLinks = document.querySelectorAll('.nav-link, .mob-link');
+        const observerOpts = { rootMargin: '-40% 0px -55% 0px' };
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    navLinks.forEach(a => {
+                        a.classList.toggle('active', a.dataset.section === entry.target.id);
+                    });
+                }
+            });
+        }, observerOpts);
+        sections.forEach(s => sectionObserver.observe(s));
+    </script>
+</body>
+
+</html>
