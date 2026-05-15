@@ -46,7 +46,7 @@ renderer.toneMapping      = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.0;
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x000510);
+scene.background = new THREE.Color(0x000308);
 
 const camera = new THREE.PerspectiveCamera(44, cW() / cH(), 0.1, 50);
 camera.position.set(0, 0.9, 5.8);
@@ -56,7 +56,7 @@ camera.position.set(0, 0.9, 5.8);
    ════════════════════════════════════════════════════════════════ */
 const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
-const bloom = new UnrealBloomPass(new THREE.Vector2(cW(), cH()), 0.85, 0.30, 0.25);
+const bloom = new UnrealBloomPass(new THREE.Vector2(cW(), cH()), 1.55, 0.55, 0.15);
 composer.addPass(bloom);
 
 /* ════════════════════════════════════════════════════════════════
@@ -78,14 +78,15 @@ controls.addEventListener('end',   () => { setTimeout(() => controls.autoRotate 
 /* ════════════════════════════════════════════════════════════════
    LUZES
    ════════════════════════════════════════════════════════════════ */
-scene.add(new THREE.AmbientLight(0x001a44, 1.5));
+scene.add(new THREE.AmbientLight(0x001833, 2.0));
 [
-  [0x0077ff, 5.0,  0, 2.2,  8],
-  [0x0055aa, 3.5,  0, 2.2, -8],
-  [0x00bbff, 3.0, -6, 1.0,  0],
-  [0x00bbff, 3.0,  6, 1.0,  0],
-  [0x0044cc, 2.5,  0, 5.0,  0],
-  [0x002277, 2.0,  0,-1.5,  0],
+  [0x00ccff, 7.0,  0, 2.2,  8],   // frente — ciano elétrico forte
+  [0x0044bb, 4.0,  0, 2.2, -8],   // costas — azul escuro
+  [0x00eeff, 4.5, -6, 1.2,  0],   // lateral esq
+  [0x00eeff, 4.5,  6, 1.2,  0],   // lateral dir
+  [0x0055ff, 3.5,  0, 5.5,  0],   // topo
+  [0x003399, 2.5,  0,-1.8,  0],   // baixo
+  [0x00ffff, 2.0,  0, 1.0,  3.5], // preenche sombras frontais
 ].forEach(([c,i,x,y,z]) => {
   const l = new THREE.PointLight(c, i, 22);
   l.position.set(x, y, z);
@@ -98,8 +99,10 @@ scene.add(new THREE.AmbientLight(0x001a44, 1.5));
 const VERT = /* glsl */`
   varying vec3 vNormal;
   varying vec3 vWorldPos;
+  varying vec2 vUv;
   void main(){
-    vec4 wp = modelMatrix * vec4(position,1.);
+    vUv       = uv;
+    vec4 wp   = modelMatrix * vec4(position,1.);
     vWorldPos = wp.xyz;
     vNormal   = normalize(normalMatrix * normal);
     gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.);
@@ -109,6 +112,7 @@ const VERT = /* glsl */`
 const FRAG = /* glsl */`
   varying vec3 vNormal;
   varying vec3 vWorldPos;
+  varying vec2 vUv;
 
   uniform float uTime;
   uniform vec3  uBase;
@@ -124,19 +128,60 @@ const FRAG = /* glsl */`
 
   float pulse(float v, float sh){ return pow(max(sin(v)*.5+.5,0.),sh); }
 
+  // ── grade topológica densa (world-space, normal-weighted) ──
+  float topoGrid(vec3 wp, vec3 n){
+    float gs = 9.5;                  // densidade da grade
+    float lw = 0.032;                // espessura das linhas
+    float cx = abs(fract(wp.x*gs) - 0.5);
+    float cy = abs(fract(wp.y*gs) - 0.5);
+    float cz = abs(fract(wp.z*gs) - 0.5);
+    float nx = abs(n.x), ny = abs(n.y), nz = abs(n.z);
+    float lYZ = 1.0 - smoothstep(0.0, lw, min(cy, cz));
+    float lXZ = 1.0 - smoothstep(0.0, lw, min(cx, cz));
+    float lXY = 1.0 - smoothstep(0.0, lw, min(cx, cy));
+    return clamp(lYZ*nx + lXZ*ny + lXY*nz, 0.0, 1.0);
+  }
+
+  // ── grade UV fina (usa UV do modelo se disponível) ──
+  float uvGrid(vec2 uv){
+    float s  = 22.0;
+    float gu = abs(fract(uv.x*s) - 0.5)*2.0;
+    float gv = abs(fract(uv.y*s) - 0.5)*2.0;
+    return 1.0 - smoothstep(0.88, 1.0, min(gu,gv));
+  }
+
   void main(){
     vec3 viewDir = normalize(cameraPosition - vWorldPos);
-    float fresnel = pow(1. - max(dot(vNormal,viewDir),0.), 2.2);
+    float fresnel = pow(1. - max(dot(vNormal,viewDir),0.), 1.9);
 
+    // scan e padrão de energia
     float scanH = pulse(vWorldPos.y*18. + uTime*2.,   8.);
     float lineA = pulse(vWorldPos.y*9.  + vWorldPos.x*3. + uTime*1.4, 12.);
     float lineB = pulse(vWorldPos.y*6.  - vWorldPos.z*4. + uTime*.9,   9.);
     float node  = pulse(vWorldPos.y*22. + uTime*3., 18.)
                 * pulse(vWorldPos.x*14. - uTime*1.5, 18.);
-    float pat   = scanH*.28 + lineA*.20 + lineB*.20 + node*.40;
+    float pat   = scanH*.25 + lineA*.18 + lineB*.18 + node*.38;
 
-    vec3  col   = uBase + uRim*fresnel*1.4 + uEnergy*pat*.6;
-    float alpha = uOpacity + fresnel*.38 + pat*.22;
+    // cor base com rim muito mais brilhante
+    vec3  col   = uBase + uRim * fresnel * 2.2 + uEnergy * pat * 0.55;
+    float alpha = uOpacity + fresnel * 0.55 + pat * 0.20;
+
+    // ── grade topológica densa ──
+    float grid     = topoGrid(vWorldPos, vNormal);
+    float gridFade = 0.55 + 0.45 * fresnel;            // mais brilhante nas bordas
+    vec3  gridCol  = vec3(0.0, 0.92, 1.0) * gridFade;
+    col   = mix(col, gridCol, grid * 0.70);
+    alpha += grid * 0.35;
+
+    // ── grade UV (se o modelo tiver UV) ──
+    float uvG = uvGrid(vUv) * (1.0 - grid);            // só onde não há grade world
+    col   = mix(col, vec3(0.05, 0.75, 1.0), uvG * 0.35);
+    alpha += uvG * 0.15;
+
+    // ── aura volumétrica (halo externo nas bordas) ──
+    float halo = pow(fresnel, 1.1) * 0.55;
+    col += vec3(0.0, 0.55, 1.0) * halo;
+    alpha += halo * 0.30;
 
     // ── contorno vermelho bilateral no hover ──
     if(uHlStr > .001){
@@ -145,21 +190,17 @@ const FRAG = /* glsl */`
       float lA = length(dA);
       float lB = length(dB);
 
-      // Anel na SUPERFÍCIE do elipsoide (len ≈ 1.0) — espessura controlada
       float ringA = smoothstep(0.55, 1.0, lA) * smoothstep(1.45, 1.0, lA);
       float ringB = smoothstep(0.55, 1.0, lB) * smoothstep(1.45, 1.0, lB);
       float ring  = max(ringA, ringB) * uHlStr;
 
-      // Leve preenchimento interno semitransparente
       float fillA = (1. - smoothstep(0., 1.0, lA));
       float fillB = (1. - smoothstep(0., 1.0, lB));
       float fill  = max(fillA, fillB) * uHlStr * 0.10;
 
-      // Pulso do anel
       float rimBoost = 1.0 + 0.4 * sin(uTime * 6.5);
-
-      vec3 red  = vec3(1.0, 0.05, 0.02) * rimBoost;
-      vec3 rFill= vec3(0.28, 0.0, 0.0);
+      vec3 red   = vec3(1.0, 0.05, 0.02) * rimBoost;
+      vec3 rFill = vec3(0.28, 0.0, 0.0);
       col   = mix(col, red,   ring * 0.95);
       col   = mix(col, rFill, fill);
       alpha += ring * 0.72 + fill * 0.08;
@@ -184,9 +225,9 @@ function makeHoloMat(opacity = 0.72) {
     fragmentShader: FRAG,
     uniforms: {
       uTime, uHlC, uHlC2, uHlS, uHlStr,
-      uBase:    { value: new THREE.Color(0x001e55) },
-      uRim:     { value: new THREE.Color(0x0066cc) },
-      uEnergy:  { value: new THREE.Color(0x00aadd) },
+      uBase:    { value: new THREE.Color(0x000e2a) },  // quase preto azulado
+      uRim:     { value: new THREE.Color(0x00ddff) },  // ciano elétrico
+      uEnergy:  { value: new THREE.Color(0x00ffff) },  // ciano puro
       uOpacity: { value: opacity },
     },
     transparent: true,
@@ -195,7 +236,7 @@ function makeHoloMat(opacity = 0.72) {
   });
 }
 
-const edgeMat = new THREE.LineBasicMaterial({ color: 0x00ccff, transparent: true, opacity: 0.65 });
+const edgeMat = new THREE.LineBasicMaterial({ color: 0x00eeff, transparent: true, opacity: 0.80 });
 
 /* ════════════════════════════════════════════════════════════════
    GRUPO DO CORPO
@@ -565,7 +606,9 @@ function animate() {
   const t = clock.getElapsedTime();
 
   uTime.value = t;
-  bloom.strength = 0.75 + 0.12 * Math.sin(t * 0.7);
+  bloom.strength = hovered
+    ? 1.85 + 0.25 * Math.sin(t * 4.0)   // mais forte no hover
+    : 1.45 + 0.15 * Math.sin(t * 0.7);
 
   // Hotspot pulse
   MUSCLES.forEach(m => {
