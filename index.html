@@ -446,9 +446,9 @@
         const iconPause = document.getElementById('iconPause');
         const musicLabel = document.getElementById('musicLabel');
         let isPlaying = false;
-        let userInteracted = false;
+        let started = false;
 
-        music.volume = 0.25;
+        music.volume = 0.22;
 
         function setPlaying(state) {
             isPlaying = state;
@@ -459,8 +459,28 @@
             musicLabel.textContent = state ? 'Pausar' : 'Música';
         }
 
-        musicBtn.addEventListener('click', () => {
-            userInteracted = true;
+        function tryPlay() {
+            if (started) return;
+            music.play().then(() => {
+                started = true;
+                setPlaying(true);
+                // Remove todos os listeners após tocar
+                ['click','scroll','touchstart','mousemove','keydown'].forEach(e =>
+                    document.removeEventListener(e, tryPlay));
+            }).catch(() => {});
+        }
+
+        // Tenta tocar imediatamente (funciona em alguns browsers)
+        music.play().then(() => { started = true; setPlaying(true); }).catch(() => {
+            // Fallback: toca no primeiro sinal de interação do usuário
+            ['click','scroll','touchstart','mousemove','keydown'].forEach(e =>
+                document.addEventListener(e, tryPlay, { once: false }));
+        });
+
+        // Botão manual: toggle play/pause
+        musicBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            started = true;
             if (isPlaying) {
                 music.pause();
                 setPlaying(false);
@@ -468,14 +488,6 @@
                 music.play().then(() => setPlaying(true)).catch(() => {});
             }
         });
-
-        // Tenta tocar automaticamente após primeira interação do usuário na página
-        document.addEventListener('click', function autoPlay() {
-            if (!userInteracted) {
-                music.play().then(() => { setPlaying(true); userInteracted = true; }).catch(() => {});
-            }
-            document.removeEventListener('click', autoPlay);
-        }, { once: true });
     </script>
 </body>
 
