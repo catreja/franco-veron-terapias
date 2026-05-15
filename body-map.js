@@ -56,7 +56,7 @@ camera.position.set(0, 0.9, 5.8);
    ════════════════════════════════════════════════════════════════ */
 const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
-const bloom = new UnrealBloomPass(new THREE.Vector2(cW(), cH()), 0.95, 0.45, 0.20);
+const bloom = new UnrealBloomPass(new THREE.Vector2(cW(), cH()), 0.28, 0.20, 0.55);
 composer.addPass(bloom);
 
 /* ════════════════════════════════════════════════════════════════
@@ -179,7 +179,7 @@ function makeHoloMat() {
   });
 }
 
-const edgeMat = new THREE.LineBasicMaterial({ color: 0x00ddff, transparent: true, opacity: 1.0 });
+const edgeMat = new THREE.LineBasicMaterial({ color: 0x00aacc, transparent: true, opacity: 0.55 });
 
 /* ════════════════════════════════════════════════════════════════
    GRUPO DO CORPO
@@ -389,7 +389,7 @@ MUSCLES.forEach(m => {
     geo.scale(rx, ry, rz);
     const edges = new THREE.EdgesGeometry(geo);
     const mat   = new THREE.LineBasicMaterial({
-      color: 0x004466, transparent: true, opacity: 0.35, depthWrite: false
+      color: 0x003355, transparent: true, opacity: 0.20, depthWrite: false
     });
     const ls = new THREE.LineSegments(edges, mat);
     ls.position.set(ox, y, z);
@@ -550,8 +550,8 @@ function animate() {
 
   uTime.value = t;
   bloom.strength = hovered
-    ? 1.30 + 0.20 * Math.sin(t * 4.0)   // pulso suave no hover
-    : 0.90 + 0.08 * Math.sin(t * 0.7);
+    ? 0.55 + 0.15 * Math.sin(t * 4.0)
+    : 0.25 + 0.05 * Math.sin(t * 0.7);
 
   // Hotspot pulse
   MUSCLES.forEach(m => {
